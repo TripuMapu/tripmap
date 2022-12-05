@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripmap/services/authservices.dart';
 export 'registerscreen.dart';
 
@@ -319,14 +318,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: SizedBox(
                     height: 50,
                     width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
+                    child: TextButton(
+                      child: const Text(
+                        'Kayıt Ol',
+                        style: TextStyle(color: Colors.white),
                       ),
-                      child: const Text('Kayıt Ol'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           setState(() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:tripmap/screens/loginscreen.dart';
 
 class ContentScreen extends StatefulWidget {
   const ContentScreen({Key? key}) : super(key: key);
@@ -98,9 +99,15 @@ class _ContentScreenState extends State<ContentScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           IconButton(
-                            //navigate to homepage
-                            onPressed: () {},
-                            icon: Icon(Icons.arrow_back),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginScreen(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.arrow_back),
                             color: Colors.white,
                           ),
                         ],
