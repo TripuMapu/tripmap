@@ -32,6 +32,7 @@ dependencies:
   fluttertoast:
   shared_preferences:
   dio:
+  flutter_rating_bar: ^4.0.1
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -57,6 +58,7 @@ flutter:
   assets:
     - png/Login_Logo.png
     - png/DuzLogo.PNG
+    - png/ayasofya.jpg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
