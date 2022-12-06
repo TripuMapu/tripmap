@@ -87,7 +87,7 @@ class _ContentScreenState extends State<ContentScreen> {
           SliverToBoxAdapter(
             child: Container(
               height: 500,
-              color: Colors.red,
+              color: Colors.white,
               child: Stack(
                 children: [
                   Image.asset('png/ayasofya.jpg',
@@ -100,12 +100,7 @@ class _ContentScreenState extends State<ContentScreen> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(),
-                                ),
-                              );
+                              Navigator.of(context).pop();
                             },
                             icon: const Icon(Icons.arrow_back),
                             color: Colors.white,

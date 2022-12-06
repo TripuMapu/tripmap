@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:tripmap/screens/contentscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
-import 'package:tripmap/screens/registerscreen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final List<dynamic> args =
-        settings.arguments as List<dynamic>; //pass argument as userID
+    final List<dynamic> args = settings.arguments as List<dynamic>;
 
     switch (settings.name) {
-      //create new homepage for signed in users
-      case '/login':
-        return CustomPageRoute(child: const LoginScreen());
-      case '/register':
-        return CustomPageRoute(child: const RegisterScreen());
+      case '/content':
+        return CustomPageRoute(child: const ContentScreen());
+
       default:
-        return MaterialPageRoute(builder: (context) => const LoginScreen());
+        return CustomPageRoute(child: const LoginScreen());
     }
   }
 }

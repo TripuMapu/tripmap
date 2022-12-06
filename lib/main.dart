@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tripmap/routegenerator.dart';
 import 'package:tripmap/screens/homescreen.dart';
 import 'package:tripmap/screens/homescreen2.dart';
 import 'package:tripmap/screens/loginscreen.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.grey,
         ),
-        home: const LoginScreen(),
+        home: const HomeScreen(),
+        onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
   }

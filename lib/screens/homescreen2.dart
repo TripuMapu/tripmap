@@ -1,4 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:tripmap/routegenerator.dart';
+import 'package:tripmap/screens/contentscreen.dart';
+import 'package:tripmap/widgets/gridview.dart';
+import 'package:tripmap/widgets/scrollablelist.dart';
 
 class MyHomePage2 extends StatefulWidget {
   @override
@@ -8,6 +15,8 @@ class MyHomePage2 extends StatefulWidget {
 class _MyHomePageState2 extends State<MyHomePage2>
     with TickerProviderStateMixin {
   bool isGrid = true;
+  int _currentDistrictIndex = 0;
+
   // TickerProviderStateMixin allows the fade out/fade in animation when changing the active button
 
   // this will control the button clicks and tab changing
@@ -40,7 +49,7 @@ class _MyHomePageState2 extends State<MyHomePage2>
   double _prevAniValue = 0.0;
 
   // these will be our tab icons. You can use whatever you like for the content of your buttons
-  List _icons = [
+  final List _icons = [
     'Müzeler',
     'Parklar',
     'Ormanlar',
@@ -183,10 +192,66 @@ class _MyHomePageState2 extends State<MyHomePage2>
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 125,
-                      height: 200,
-                      color: Colors.red,
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _currentDistrictIndex =
+                              index; //gridviewda gelen veriyi değiştir
+                        });
+                      },
+                      child: Container(
+                        width: 125,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: _currentDistrictIndex == index
+                                ? Colors.blue
+                                : Colors.white,
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Stack(
+                          children: [
+                            SizedBox(
+                              height: 200,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.asset(
+                                  'png/ayasofya.jpg',
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: Color.fromARGB(113, 0, 0, 0),
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  height: 25,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: const [
+                                      Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Text(
+                                          'Fatih',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -225,10 +290,91 @@ class _MyHomePageState2 extends State<MyHomePage2>
                         itemBuilder: (BuildContext context, int index) {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 350,
-                              height: 250,
-                              color: Colors.red,
+                            child: InkWell(
+                              onTap: (() {
+                                Navigator.of(context)
+                                    .pushNamed('/content', arguments: []);
+                              }),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Container(
+                                  width: 300,
+                                  height: 250,
+                                  color: Colors.black,
+                                  child: Stack(
+                                    children: [
+                                      SizedBox(
+                                        height: 250,
+                                        child: ShaderMask(
+                                          shaderCallback: (rect) {
+                                            return const LinearGradient(
+                                                begin: Alignment.bottomLeft,
+                                                end: Alignment.topRight,
+                                                colors: [
+                                                  Colors.black,
+                                                  Color.fromARGB(124, 0, 0, 0),
+                                                  Colors.transparent,
+                                                ],
+                                                stops: [
+                                                  .35,
+                                                  .75,
+                                                  1,
+                                                ]).createShader(Rect.fromLTRB(
+                                                0, 0, rect.width, rect.height));
+                                          },
+                                          blendMode: BlendMode.dstIn,
+                                          child: Image.asset(
+                                            'png/ayasofya.jpg',
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(3.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: const [
+                                                Text(
+                                                  '4.5/5',
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.white),
+                                                ),
+                                                Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                  size: 20,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 30,
+                                            color: const Color.fromARGB(
+                                                113, 0, 0, 0),
+                                            child: Row(
+                                              children: const [
+                                                Padding(
+                                                    padding: EdgeInsets.all(5),
+                                                    child: Text(
+                                                      'Ayasofya',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           );
                         }),
@@ -277,7 +423,7 @@ class _MyHomePageState2 extends State<MyHomePage2>
                             });
                           },
                           icon: Icon(
-                            Icons.abc,
+                            Icons.grid_view_sharp,
                             color: isGrid ? Colors.purple : Colors.grey,
                           )),
                       IconButton(
@@ -287,7 +433,7 @@ class _MyHomePageState2 extends State<MyHomePage2>
                             });
                           },
                           icon: Icon(
-                            Icons.ac_unit,
+                            Icons.format_list_bulleted,
                             color: isGrid ? Colors.grey : Colors.purple,
                           )),
                     ],
@@ -301,14 +447,12 @@ class _MyHomePageState2 extends State<MyHomePage2>
       body: TabBarView(
         controller: _controller,
         children: [
-          isGrid ? _gridView(Colors.blue) : _scrollableList(Colors.blue),
-          isGrid ? _gridView(Colors.green) : _scrollableList(Colors.green),
-          isGrid
-              ? _gridView(Colors.amberAccent)
-              : _scrollableList(Colors.amberAccent),
-          isGrid ? _gridView(Colors.purple) : _scrollableList(Colors.purple),
-          isGrid ? _gridView(Colors.red) : _scrollableList(Colors.red),
-          isGrid ? _gridView(Colors.teal) : _scrollableList(Colors.teal),
+          isGrid ? GridViewWidget() : ScrollableListWidget(),
+          isGrid ? GridViewWidget() : ScrollableListWidget(),
+          isGrid ? GridViewWidget() : ScrollableListWidget(),
+          isGrid ? GridViewWidget() : ScrollableListWidget(),
+          isGrid ? GridViewWidget() : ScrollableListWidget(),
+          isGrid ? GridViewWidget() : ScrollableListWidget(),
         ],
       ),
     );
@@ -439,6 +583,18 @@ class _MyHomePageState2 extends State<MyHomePage2>
   }
 
   Widget _gridView(Color color) {
+    List<bool> isBookmarked = [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+    ];
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -453,8 +609,97 @@ class _MyHomePageState2 extends State<MyHomePage2>
             ),
             delegate: SliverChildBuilderDelegate(childCount: 10,
                 (BuildContext context, int index) {
-              return Container(
-                color: color,
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: InkWell(
+                  onTap: () => Navigator.of(context)
+                      .pushNamed('/content', arguments: []),
+                  child: Container(
+                    color: Colors.black,
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          height: 250,
+                          child: ShaderMask(
+                            shaderCallback: (rect) {
+                              return const LinearGradient(
+                                  begin: Alignment.bottomLeft,
+                                  end: Alignment.topRight,
+                                  colors: [
+                                    Colors.black,
+                                    Color.fromARGB(124, 0, 0, 0),
+                                    Colors.transparent,
+                                  ],
+                                  stops: [
+                                    .35,
+                                    .75,
+                                    1,
+                                  ]).createShader(
+                                  Rect.fromLTRB(0, 0, rect.width, rect.height));
+                            },
+                            blendMode: BlendMode.dstIn,
+                            child: Image.asset(
+                              'png/ayasofya.jpg',
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: const [
+                                  Text(
+                                    '4.5/5',
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.white),
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: 18,
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 30,
+                              color: const Color.fromARGB(113, 0, 0, 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Text(
+                                      'Ayasofya',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isBookmarked[index] = true;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        isBookmarked[index]
+                                            ? Icons.bookmark
+                                            : Icons.bookmark_outline,
+                                        color: Colors.white,
+                                      ))
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               );
             }),
           ),
@@ -467,12 +712,73 @@ class _MyHomePageState2 extends State<MyHomePage2>
     return ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 200,
-              color: color,
-            ),
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
+                child: Container(
+                  height: 200,
+                  color: Color.fromARGB(255, 236, 236, 236),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Container(
+                          height: 175,
+                          width: 120,
+                          child: Image.asset(
+                            'png/ayasofya.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 3),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Ayasofya',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: RatingBarIndicator(
+                                    rating: 3.5,
+                                    itemBuilder: (context, index) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    itemCount: 5,
+                                    itemSize: 17,
+                                    direction: Axis.horizontal,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.bookmark_outline,
+                                      color: Colors.grey,
+                                    ))
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 13, right: 13),
+                child: Divider(
+                  thickness: 1,
+                ),
+              ),
+            ],
           );
         });
   }
