@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripmap/screens/contentscreen.dart';
+import 'package:tripmap/screens/homescreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 
 class RouteGenerator {
@@ -7,6 +8,8 @@ class RouteGenerator {
     final List<dynamic> args = settings.arguments as List<dynamic>;
 
     switch (settings.name) {
+      case '/main':
+        return CustomPageRoute(child: const HomeScreen());
       case '/content':
         return CustomPageRoute(child: const ContentScreen());
 

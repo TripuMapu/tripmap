@@ -218,6 +218,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
+                          Navigator.of(context).popUntil((route) => false);
+                          Navigator.of(context)
+                              .pushNamed('/main', arguments: []);
                           if (_formKey.currentState!.validate()) {
                             setState(() {
                               WidgetsBinding.instance.addPostFrameCallback(
