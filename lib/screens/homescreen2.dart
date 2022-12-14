@@ -142,11 +142,11 @@ class _MyHomePageState2 extends State<MyHomePage2>
                     itemCount: _icons.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                          // each button's key
-                          key: _keys[index],
-                          // padding for the buttons
-                          padding: EdgeInsets.all(6.0),
-                          child: ButtonTheme(
+                        // each button's key
+                        key: _keys[index],
+                        // padding for the buttons
+                        padding: EdgeInsets.all(6.0),
+                        /*child: ButtonTheme(
                               child: AnimatedBuilder(
                             animation: _colorTweenBackgroundOn,
                             builder: (context, child) => FlatButton(
@@ -172,7 +172,8 @@ class _MyHomePageState2 extends State<MyHomePage2>
                                   _icons[index],
                                   // get the color of the icon (dependent of its state)
                                 )),
-                          )));
+                          ))*/
+                      );
                     })),
           ),
           const SliverToBoxAdapter(
