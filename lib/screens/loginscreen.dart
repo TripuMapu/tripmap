@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripmap/screens/contentscreen.dart';
 import 'package:tripmap/screens/homescreen.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
+import 'package:tripmap/screens/mapsample.dart';
 import 'package:tripmap/screens/registerscreen.dart';
 import 'package:tripmap/services/authservices.dart';
 export 'loginscreen.dart';
@@ -386,6 +387,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => HomeScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: TextButton(
+                      child: const Text(
+                        'MapScreen',
+                        style: TextStyle(
+                          color: Color(0xFF6c43BC),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MapSample(),
                           ),
                         );
                       },
