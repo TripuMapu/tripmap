@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tripmap/routegenerator.dart';
-import 'package:tripmap/screens/homescreen.dart';
-import 'package:tripmap/screens/homescreen2.dart';
 import 'package:tripmap/screens/loginscreen.dart';
-import 'package:tripmap/screens/contentscreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

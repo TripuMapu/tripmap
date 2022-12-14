@@ -90,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: const SizedBox(height: 75),
+                  child: const SizedBox(height: 100),
                 ),
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -98,7 +98,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: nameController,
                     decoration: InputDecoration(
                       labelText: 'Ad Soyad',
-                      icon: const Icon(Icons.account_circle),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(color: Color(0xFF6C43BC)),
@@ -135,7 +134,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: mailController,
                     decoration: InputDecoration(
                       labelText: 'E-Mail',
-                      icon: const Icon(Icons.alternate_email),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(color: Color(0xFF6C43BC)),
@@ -176,7 +174,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: nameController,
                     decoration: InputDecoration(
                       labelText: 'Kullanıcı Adı',
-                      icon: const Icon(Icons.account_circle),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(color: Color(0xFF6C43BC)),
@@ -214,7 +211,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: passwordController,
                     decoration: InputDecoration(
                       labelText: 'Şifre',
-                      icon: const Icon(Icons.key),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(color: Color(0xFF6C43BC)),
@@ -259,7 +255,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: passwordagainController,
                     decoration: InputDecoration(
                       labelText: 'Şifre Tekrar',
-                      icon: const Icon(Icons.key),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: const BorderSide(color: Color(0xFF6C43BC)),
@@ -297,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 50),
                 Container(
                   alignment: Alignment.center,
                   height: 50,

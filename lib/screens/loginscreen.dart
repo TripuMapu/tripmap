@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
         automaticallyImplyLeading: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: const Text('Giriş Yap'),
+        title: const Text('Giriş Yap', style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Container(
@@ -97,7 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextFormField(
                       controller: nameController,
                       decoration: InputDecoration(
-                        icon: const Icon(Icons.account_circle),
                         labelText: 'Kullanıcı Adı',
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -137,7 +136,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                       controller: passwordController,
                       decoration: InputDecoration(
-                        icon: const Icon(Icons.key),
                         labelText: 'Şifre',
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -238,10 +236,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                         LoginScreen.email = val.data['email'];
                                         LoginScreen.username =
                                             val.data['username'];
-                                        LoginScreen.profilepicture =
-                                            val.data['profilepicture'];
-                                        LoginScreen.isArtist =
-                                            val.data['isArtist'];
                                         _handleRemeberme();
                                         setState(() {
                                           hideLoadingOverlay();

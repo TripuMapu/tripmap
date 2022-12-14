@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:tripmap/screens/loginscreen.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../services/authservices.dart';
 
 class ContentScreen extends StatefulWidget {
   const ContentScreen({Key? key}) : super(key: key);
@@ -10,7 +12,25 @@ class ContentScreen extends StatefulWidget {
 }
 
 class _ContentScreenState extends State<ContentScreen> {
+  int activeIndex = 0;
+  final commentJson = [];
+  final urlImages = [
+    'png/ayasofya.jpg',
+    'png/ayasofya1.jpg',
+    'png/ayasofya2.jpg',
+    'png/ayasofya3.jpg',
+    'png/ayasofya4.jpg'
+  ];
   bool isBookmarked = false;
+
+  void getComments() async {
+    await AuthService().getlocationcomments(1 /*lokasyon idsi gelcek*/).then(
+      (value) {
+        commentJson.add(value);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,12 +106,33 @@ class _ContentScreenState extends State<ContentScreen> {
         slivers: [
           SliverToBoxAdapter(
             child: Container(
-              height: 500,
+              height: 450,
               color: Colors.white,
               child: Stack(
                 children: [
-                  Image.asset('png/ayasofya.jpg',
-                      height: 500, fit: BoxFit.fitHeight),
+                  CarouselSlider.builder(
+                    itemCount: urlImages.length,
+                    itemBuilder: (context, index, realIndex) {
+                      final urlImage = urlImages[index];
+                      return buildImage(urlImage, index);
+                    },
+                    options: CarouselOptions(
+                        height: 450,
+                        enlargeCenterPage: true,
+                        enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        viewportFraction: 1,
+                        autoPlay: true,
+                        autoPlayInterval: const Duration(seconds: 10),
+                        onPageChanged: (index, reason) =>
+                            setState(() => activeIndex = index)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 60.0),
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: buildIndicator(),
+                    ),
+                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -128,13 +169,15 @@ class _ContentScreenState extends State<ContentScreen> {
                             ),
                             IconButton(
                               onPressed: () {
-                                setState(() {
-                                  if (isBookmarked == false) {
-                                    isBookmarked = true;
-                                  } else {
-                                    isBookmarked = false;
-                                  }
-                                });
+                                setState(
+                                  () {
+                                    if (isBookmarked == false) {
+                                      isBookmarked = true;
+                                    } else {
+                                      isBookmarked = false;
+                                    }
+                                  },
+                                );
                               },
                               icon: Icon(
                                 isBookmarked
@@ -168,7 +211,7 @@ class _ContentScreenState extends State<ContentScreen> {
             ),
           ),
           const SliverPadding(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
             sliver: SliverToBoxAdapter(
               child: Text(
                 "Ayasofya, eski adıyla Kutsal Bilgelik Kilisesi ve Ayasofya Müzesi veya günümüzdeki resmî adıyla Ayasofya-i Kebîr Câmi-i Şerîfi, İstanbul'da yer alan bir cami ve eski bazilika, katedral ve müzedir.",
@@ -180,9 +223,12 @@ class _ContentScreenState extends State<ContentScreen> {
             delegate:
                 SliverChildBuilderDelegate(childCount: 3, (context, index) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: Column(
                   children: [
+                    const Divider(
+                      thickness: 1,
+                    ),
                     Row(
                       children: [
                         ClipRRect(
@@ -223,12 +269,8 @@ class _ContentScreenState extends State<ContentScreen> {
                     const Padding(
                       padding: EdgeInsets.all(5),
                       child: Text(
-                          'Bu hayatta ne olursan ol, iki karış mermere 4 satır yazı olma.'),
+                          'Çok güzel bir geziydi! Herkese Tavsiye Ederim.'),
                     ),
-                    const Divider(
-                      //List length-1 çizgi atılacak
-                      thickness: 1,
-                    )
                   ],
                 ),
               );
@@ -238,4 +280,22 @@ class _ContentScreenState extends State<ContentScreen> {
       ),
     );
   }
+
+  Widget buildImage(String urlImage, int index) => Image.asset(
+        urlImage,
+        fit: BoxFit.cover,
+      );
+
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+        activeIndex: activeIndex,
+        count: urlImages.length,
+        effect: const ScrollingDotsEffect(
+          dotColor: Color.fromARGB(131, 255, 255, 255),
+          activeDotColor: Colors.white,
+          dotWidth: 10.0,
+          dotHeight: 10.0,
+          spacing: 4.0,
+        ),
+        onDotClicked: (index) {},
+      );
 }
