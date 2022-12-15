@@ -49,7 +49,7 @@ class AuthService {
 
   getinfo(usertoken) async {
     try {
-      return await dio.get('http://mobileapp-server.herokuapp.com/getinfo',
+      return await dio.get('http://localhost:8080/getinfo',
           options: Options(headers: {"Authorization": 'Bearer $usertoken'}));
     } on DioError catch (e) {
       Fluttertoast.showToast(
@@ -66,31 +66,15 @@ class AuthService {
   Future<List> getlocationcomments(int locationID) async {
     try {
       final res = await dio.post(
-        'http://localhost:8080/getcomments',
+        'http://192.168.1.38:5554/getcomments',
         data: {'locationId': locationID},
       );
       if (res.data['success']) {
         return res.data['array'];
       } else {
-        Fluttertoast.showToast(
-          msg: res.data['msg'],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
         return List.empty();
       }
     } on DioError catch (e) {
-      Fluttertoast.showToast(
-        msg: e.response!.data['msg'],
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
       rethrow;
     }
   }

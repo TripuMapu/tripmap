@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tripmap/models/comment.dart';
+import 'package:tripmap/screens/loginscreen.dart';
 import '../services/authservices.dart';
 
 class ContentScreen extends StatefulWidget {
@@ -12,8 +14,10 @@ class ContentScreen extends StatefulWidget {
 }
 
 class _ContentScreenState extends State<ContentScreen> {
+  OverlayEntry? entry;
   int activeIndex = 0;
-  final commentJson = [];
+  List commentJson = [];
+  List<Comment> commentList = [];
   final urlImages = [
     'png/ayasofya.jpg',
     'png/ayasofya1.jpg',
@@ -24,12 +28,48 @@ class _ContentScreenState extends State<ContentScreen> {
   bool isBookmarked = false;
 
   void getComments() async {
-    await AuthService().getlocationcomments(1 /*lokasyon idsi gelcek*/).then(
+    await AuthService().getlocationcomments(1).then(
       (value) {
-        commentJson.add(value);
+        commentJson = value;
+        setState(() {
+          commentList =
+              commentJson.map((json) => Comment.fromJson(json)).toList();
+          hideLoadingOverlay();
+        });
       },
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
+    getComments();
+  }
+
+  void showLoadingOverlay() {
+    final overlay = Overlay.of(context)!;
+
+    entry = OverlayEntry(
+      builder: (context) => buildLoadingOverlay(),
+    );
+
+    overlay.insert(entry!);
+  }
+
+  void hideLoadingOverlay() {
+    entry!.remove();
+    entry = null;
+  }
+
+  Widget buildLoadingOverlay() => const Material(
+        color: Colors.transparent,
+        elevation: 8,
+        child: Center(
+          child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 163, 171, 192)),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -220,8 +260,8 @@ class _ContentScreenState extends State<ContentScreen> {
             ),
           ),
           SliverList(
-            delegate:
-                SliverChildBuilderDelegate(childCount: 3, (context, index) {
+            delegate: SliverChildBuilderDelegate(childCount: commentList.length,
+                (context, index) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                 child: Column(
@@ -252,7 +292,7 @@ class _ContentScreenState extends State<ContentScreen> {
                                     fontSize: 13, fontWeight: FontWeight.bold),
                               ),
                               RatingBarIndicator(
-                                rating: 5.0,
+                                rating: commentList[index].rating,
                                 itemBuilder: (context, index) => const Icon(
                                   Icons.star,
                                   color: Colors.amber,
@@ -266,10 +306,9 @@ class _ContentScreenState extends State<ContentScreen> {
                         )
                       ],
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.all(5),
-                      child: Text(
-                          'Çok güzel bir geziydi! Herkese Tavsiye Ederim.'),
+                      child: Text(commentList[index].content),
                     ),
                   ],
                 ),
