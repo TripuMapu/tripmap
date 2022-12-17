@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tripmap/routegenerator.dart';
 import 'package:tripmap/screens/loginscreen.dart';
+import 'package:tripmap/screens/profilescreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.grey,
         ),
-        home: const LoginScreen(),
+        // home: const LoginScreen(),
+        home: const ProfileScreen(),
         onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
