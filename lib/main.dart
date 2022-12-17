@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tripmap/routegenerator.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 import 'package:tripmap/screens/profilescreen.dart';
+import 'package:tripmap/screens/profilescreenedit.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.grey,
         ),
         // home: const LoginScreen(),
-        home: const ProfileScreen(),
+        //home: const ProfileScreen(),
+        home: const ProfileScreenEdit(),
         onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
