@@ -23,11 +23,6 @@ class _HomeScreenState extends State<HomeScreen>
       backgroundColor: Color.fromARGB(147, 9, 11, 19),
     ),
     BottomNavigationBarItem(
-      label: 'Arama',
-      icon: Icon(Icons.search),
-      backgroundColor: Color.fromARGB(147, 9, 11, 19),
-    ),
-    BottomNavigationBarItem(
       label: 'Profil',
       icon: Icon(Icons.man),
       backgroundColor: Color.fromARGB(147, 9, 11, 19),
@@ -37,29 +32,31 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          bottomNavigationBar: AddBottomNavBar()
-              .bottomNavigationBar(pageController, currentIndex, (index) {
-            setState(() {
+      length: 3,
+      child: Scaffold(
+        bottomNavigationBar: AddBottomNavBar()
+            .bottomNavigationBar(pageController, currentIndex, (index) {
+          setState(
+            () {
               currentIndex = index;
               pageController.animateToPage(
                 index,
                 duration: const Duration(milliseconds: 750),
                 curve: Curves.ease,
               );
-            });
-          }, bottomnavbaritems),
-          backgroundColor: Colors.white,
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              MyHomePage2(),
-              Container(),
-              Container(),
-            ],
-          ),
-        ));
+            },
+          );
+        }, bottomnavbaritems),
+        backgroundColor: Colors.white,
+        body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: pageController,
+          children: [
+            MyHomePage2(),
+            Container(),
+          ],
+        ),
+      ),
+    );
   }
 }

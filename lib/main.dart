@@ -33,9 +33,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.grey,
         ),
-        // home: const LoginScreen(),
-        //home: const ProfileScreen(),
-        home: const ProfileScreenEdit(),
+        home: const LoginScreen(),
         onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );

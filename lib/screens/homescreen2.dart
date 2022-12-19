@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:tripmap/routegenerator.dart';
 import 'package:tripmap/screens/contentscreen.dart';
+import 'package:tripmap/widgets/search.dart';
 import 'package:tripmap/widgets/gridview.dart';
 import 'package:tripmap/widgets/scrollablelist.dart';
 
@@ -127,6 +128,14 @@ class _MyHomePageState2 extends State<MyHomePage2>
         return [
           SliverAppBar(
             backgroundColor: Colors.transparent,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showSearch(context: context, delegate: Search());
+                },
+                icon: const Icon(Icons.search),
+              )
+            ],
           ),
           SliverToBoxAdapter(
             child: Container(
