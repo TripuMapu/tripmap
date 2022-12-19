@@ -2,8 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:tripmap/models/comment.dart';
+import 'package:tripmap/models/district.dart';
+import 'package:tripmap/models/location.dart';
+import 'package:tripmap/models/locationtype.dart';
 import 'package:tripmap/routegenerator.dart';
 import 'package:tripmap/screens/contentscreen.dart';
+import 'package:tripmap/services/authservices.dart';
 import 'package:tripmap/widgets/search.dart';
 import 'package:tripmap/widgets/gridview.dart';
 import 'package:tripmap/widgets/scrollablelist.dart';
@@ -15,86 +20,61 @@ class MyHomePage2 extends StatefulWidget {
 
 class _MyHomePageState2 extends State<MyHomePage2>
     with TickerProviderStateMixin {
+  bool isFetched = false;
   bool isGrid = true;
+  OverlayEntry? entry;
   int _currentDistrictIndex = 0;
-
-  // TickerProviderStateMixin allows the fade out/fade in animation when changing the active button
-
-  // this will control the button clicks and tab changing
   late TabController _controller;
-
-  // this will control the animation when a button changes from an off state to an on state
   late AnimationController _animationControllerOn;
-
-  // this will control the animation when a button changes from an on state to an off state
   late AnimationController _animationControllerOff;
-
-  // this will give the background color values of a button when it changes to an on state
   late Animation _colorTweenBackgroundOn;
   late Animation _colorTweenBackgroundOff;
-
-  // this will give the foreground color values of a button when it changes to an on state
   late Animation _colorTweenForegroundOn;
   late Animation _colorTweenForegroundOff;
-
-  // when swiping, the _controller.index value only changes after the animation, therefore, we need this to trigger the animations and save the current index
   int _currentIndex = 0;
-
-  // saves the previous active tab
   int _prevControllerIndex = 0;
-
-  // saves the value of the tab animation. For example, if one is between the 1st and the 2nd tab, this value will be 0.5
   double _aniValue = 0.0;
-
-  // saves the previous value of the tab animation. It's used to figure the direction of the animation
   double _prevAniValue = 0.0;
-
-  // these will be our tab icons. You can use whatever you like for the content of your buttons
-  final List _icons = [
-    'Müzeler',
-    'Parklar',
-    'Ormanlar',
-    'Sahiller',
-    'Resimlik',
-    'Selam'
-  ];
-
-  // active button's foreground color
-  Color _foregroundOn = Colors.white;
-  Color _foregroundOff = Colors.black;
-
-  // active button's background color
-  Color _backgroundOn = Colors.blue;
-  Color? _backgroundOff = Colors.grey[300];
-
-  // scroll controller for the TabBar
-  ScrollController _scrollController = new ScrollController();
-
-  // this will save the keys for each Tab in the Tab Bar, so we can retrieve their position and size for the scroll controller
-  List _keys = [];
-
-  // regist if the the button was tapped
+  final Color _foregroundOn = Colors.white;
+  final Color _foregroundOff = Colors.black;
+  final Color _backgroundOn = Colors.blue;
+  final Color? _backgroundOff = Colors.grey[300];
+  final ScrollController _scrollController = ScrollController();
+  final List _keys = [];
   bool _buttonTap = false;
+  List<District> districtslist = [];
+  List<Location> locationlist = [];
+  List<LocationType> typelist = [];
+  List<Widget> gridviewlist = [];
+  List<Widget> scrollableviewlist = [];
 
-  @override
-  void initState() {
-    super.initState();
-
-    for (int index = 0; index < _icons.length; index++) {
+  void initializedata() async {
+    await AuthService().getdistricts().then((val) {
+      districtslist = val.map((json) => District.fromJson(json)).toList();
+    });
+    await AuthService().getlocations(1).then((val) {
+      locationlist = val.map((json) => Location.fromJson(json)).toList();
+    });
+    await AuthService().gettypes().then((val) {
+      typelist = val.map((json) => LocationType.fromJson(json)).toList();
+    });
+    for (int index = 0; index < typelist.length; index++) {
       // create a GlobalKey for each Tab
-      _keys.add(new GlobalKey());
+      _keys.add(GlobalKey());
+      gridviewlist.add(GridViewWidget(
+        locationslist: locationlist,
+        typeid: typelist[index].id,
+      ));
+      scrollableviewlist.add(ScrollableListWidget(
+        locationslist: locationlist,
+        typeid: typelist[index].id,
+      ));
     }
-
-    // this creates the controller with 6 tabs (in our case)
-    _controller = TabController(vsync: this, length: _icons.length);
-    // this will execute the function every time there's a swipe animation
+    _controller = TabController(vsync: this, length: typelist.length);
     _controller.animation!.addListener(_handleTabAnimation);
-    // this will execute the function every time the _controller.index value changes
     _controller.addListener(_handleTabChange);
-
-    _animationControllerOff =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 75));
-    // so the inactive buttons start in their "final" state (color)
+    _animationControllerOff = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 75));
     _animationControllerOff.value = 1.0;
     _colorTweenBackgroundOff =
         ColorTween(begin: _backgroundOn, end: _backgroundOff)
@@ -102,10 +82,8 @@ class _MyHomePageState2 extends State<MyHomePage2>
     _colorTweenForegroundOff =
         ColorTween(begin: _foregroundOn, end: _foregroundOff)
             .animate(_animationControllerOff);
-
-    _animationControllerOn =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 150));
-    // so the inactive buttons start in their "final" state (color)
+    _animationControllerOn = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 150));
     _animationControllerOn.value = 1.0;
     _colorTweenBackgroundOn =
         ColorTween(begin: _backgroundOff, end: _backgroundOn)
@@ -113,6 +91,55 @@ class _MyHomePageState2 extends State<MyHomePage2>
     _colorTweenForegroundOn =
         ColorTween(begin: _foregroundOff, end: _foregroundOn)
             .animate(_animationControllerOn);
+    setState(() {
+      hideLoadingOverlay();
+      isFetched = true;
+    });
+  }
+
+  void changelocationdata() async {
+    setState(() {
+      isFetched = false;
+    });
+    await AuthService().getlocations(_currentDistrictIndex + 1).then((val) {
+      locationlist.clear();
+      locationlist = val.map((json) => Location.fromJson(json)).toList();
+    });
+    setState(() {
+      isFetched = true;
+    });
+  }
+
+  void showLoadingOverlay() {
+    final overlay = Overlay.of(context)!;
+
+    entry = OverlayEntry(
+      builder: (context) => buildLoadingOverlay(),
+    );
+
+    overlay.insert(entry!);
+  }
+
+  void hideLoadingOverlay() {
+    entry!.remove();
+    entry = null;
+  }
+
+  Widget buildLoadingOverlay() => const Material(
+        color: Colors.transparent,
+        elevation: 8,
+        child: Center(
+          child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 163, 171, 192)),
+        ),
+      );
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
+    initializedata();
   }
 
   @override
@@ -148,23 +175,22 @@ class _MyHomePageState2 extends State<MyHomePage2>
                     // make the list horizontal
                     scrollDirection: Axis.horizontal,
                     // number of tabs
-                    itemCount: _icons.length,
+                    itemCount: typelist.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        // each button's key
-                        key: _keys[index],
-                        // padding for the buttons
-                        padding: EdgeInsets.all(6.0),
-                        /*child: ButtonTheme(
+                          // each button's key
+                          key: _keys[index],
+                          // padding for the buttons
+                          padding: EdgeInsets.all(6.0),
+                          child: ButtonTheme(
                               child: AnimatedBuilder(
                             animation: _colorTweenBackgroundOn,
-                            builder: (context, child) => FlatButton(
+                            builder: (context, child) => ElevatedButton(
                                 // get the color of the button's background (dependent of its state)
-                                color: _getBackgroundColor(index),
                                 // make the button a rectangle with round corners
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(7.0)),
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        _getBackgroundColor(index))),
                                 onPressed: () {
                                   setState(() {
                                     _buttonTap = true;
@@ -178,11 +204,10 @@ class _MyHomePageState2 extends State<MyHomePage2>
                                 },
                                 child: Text(
                                   // get the icon
-                                  _icons[index],
+                                  typelist[index].name,
                                   // get the color of the icon (dependent of its state)
                                 )),
-                          ))*/
-                      );
+                          )));
                     })),
           ),
           const SliverToBoxAdapter(
@@ -197,7 +222,7 @@ class _MyHomePageState2 extends State<MyHomePage2>
               color: Colors.white,
               child: ListView.builder(
                 clipBehavior: Clip.none,
-                itemCount: 5,
+                itemCount: districtslist.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
@@ -227,8 +252,8 @@ class _MyHomePageState2 extends State<MyHomePage2>
                               height: 200,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.asset(
-                                  'png/ayasofya.jpg',
+                                child: Image.network(
+                                  districtslist[index].districtimageurl,
                                   fit: BoxFit.fitHeight,
                                 ),
                               ),
@@ -246,12 +271,13 @@ class _MyHomePageState2 extends State<MyHomePage2>
                                   height: 25,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    children: const [
+                                    children: [
                                       Padding(
-                                        padding: EdgeInsets.all(5),
+                                        padding: const EdgeInsets.all(5),
                                         child: Text(
-                                          'Fatih',
-                                          style: TextStyle(color: Colors.white),
+                                          districtslist[index].districtname,
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
                                       ),
                                     ],
@@ -454,17 +480,12 @@ class _MyHomePageState2 extends State<MyHomePage2>
           ),
         ];
       },
-      body: TabBarView(
-        controller: _controller,
-        children: [
-          isGrid ? GridViewWidget() : ScrollableListWidget(),
-          isGrid ? GridViewWidget() : ScrollableListWidget(),
-          isGrid ? GridViewWidget() : ScrollableListWidget(),
-          isGrid ? GridViewWidget() : ScrollableListWidget(),
-          isGrid ? GridViewWidget() : ScrollableListWidget(),
-          isGrid ? GridViewWidget() : ScrollableListWidget(),
-        ],
-      ),
+      body: isFetched
+          ? TabBarView(
+              controller: _controller,
+              children:
+                  isFetched ? (isGrid ? gridviewlist : scrollableviewlist) : [])
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -548,7 +569,7 @@ class _MyHomePageState2 extends State<MyHomePage2>
       // if the button is to the right of the middle
 
       // get the last button
-      renderBox = _keys[_icons.length - 1].currentContext.findRenderObject();
+      renderBox = _keys[typelist.length - 1].currentContext.findRenderObject();
       // get its position
       position = renderBox.localToGlobal(Offset.zero).dx;
       // and size
@@ -565,7 +586,7 @@ class _MyHomePageState2 extends State<MyHomePage2>
 
     // scroll the calculated ammount
     _scrollController.animateTo(offset + _scrollController.offset,
-        duration: new Duration(milliseconds: 150), curve: Curves.easeInOut);
+        duration: const Duration(milliseconds: 150), curve: Curves.easeInOut);
   }
 
   _getBackgroundColor(int index) {
@@ -590,206 +611,5 @@ class _MyHomePageState2 extends State<MyHomePage2>
     } else {
       return _foregroundOff;
     }
-  }
-
-  Widget _gridView(Color color) {
-    List<bool> isBookmarked = [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ];
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.all(10),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: .55,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              mainAxisExtent: 250,
-            ),
-            delegate: SliverChildBuilderDelegate(childCount: 10,
-                (BuildContext context, int index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: InkWell(
-                  onTap: () => Navigator.of(context)
-                      .pushNamed('/content', arguments: []),
-                  child: Container(
-                    color: Colors.black,
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          height: 250,
-                          child: ShaderMask(
-                            shaderCallback: (rect) {
-                              return const LinearGradient(
-                                  begin: Alignment.bottomLeft,
-                                  end: Alignment.topRight,
-                                  colors: [
-                                    Colors.black,
-                                    Color.fromARGB(124, 0, 0, 0),
-                                    Colors.transparent,
-                                  ],
-                                  stops: [
-                                    .35,
-                                    .75,
-                                    1,
-                                  ]).createShader(
-                                  Rect.fromLTRB(0, 0, rect.width, rect.height));
-                            },
-                            blendMode: BlendMode.dstIn,
-                            child: Image.asset(
-                              'png/ayasofya.jpg',
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: const [
-                                  Text(
-                                    '4.5/5',
-                                    style: TextStyle(
-                                        fontSize: 13, color: Colors.white),
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                    size: 18,
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: 30,
-                              color: const Color.fromARGB(113, 0, 0, 0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(
-                                      'Ayasofya',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          isBookmarked[index] = true;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        isBookmarked[index]
-                                            ? Icons.bookmark
-                                            : Icons.bookmark_outline,
-                                        color: Colors.white,
-                                      ))
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _scrollableList(Color color) {
-    return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
-                child: Container(
-                  height: 200,
-                  color: Color.fromARGB(255, 236, 236, 236),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Container(
-                          height: 175,
-                          width: 120,
-                          child: Image.asset(
-                            'png/ayasofya.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 3),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Ayasofya',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: RatingBarIndicator(
-                                    rating: 3.5,
-                                    itemBuilder: (context, index) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    itemCount: 5,
-                                    itemSize: 17,
-                                    direction: Axis.horizontal,
-                                  ),
-                                ),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.bookmark_outline,
-                                      color: Colors.grey,
-                                    ))
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 13, right: 13),
-                child: Divider(
-                  thickness: 1,
-                ),
-              ),
-            ],
-          );
-        });
   }
 }

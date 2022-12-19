@@ -11,7 +11,10 @@ class RouteGenerator {
       case '/main':
         return CustomPageRoute(child: const HomeScreen());
       case '/content':
-        return CustomPageRoute(child: const ContentScreen());
+        return CustomPageRoute(
+            child: ContentScreen(
+          location: args.elementAt(0),
+        ));
 
       default:
         return CustomPageRoute(child: const LoginScreen());

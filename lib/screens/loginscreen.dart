@@ -356,12 +356,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.push(
+                        /* Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ContentScreen(),
                           ),
-                        );
+                        ); */
                       },
                     ),
                   ),

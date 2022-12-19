@@ -3,11 +3,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tripmap/models/comment.dart';
-import 'package:tripmap/screens/loginscreen.dart';
+import 'package:tripmap/models/location.dart';
 import '../services/authservices.dart';
 
 class ContentScreen extends StatefulWidget {
-  const ContentScreen({Key? key}) : super(key: key);
+  final Location location;
+  const ContentScreen({Key? key, required this.location}) : super(key: key);
 
   @override
   State<ContentScreen> createState() => _ContentScreenState();
@@ -16,7 +17,6 @@ class ContentScreen extends StatefulWidget {
 class _ContentScreenState extends State<ContentScreen> {
   OverlayEntry? entry;
   int activeIndex = 0;
-  List commentJson = [];
   List<Comment> commentList = [];
   final urlImages = [
     'png/ayasofya.jpg',
@@ -29,11 +29,9 @@ class _ContentScreenState extends State<ContentScreen> {
 
   void getComments() async {
     await AuthService().getlocationcomments(1).then(
-      (value) {
-        commentJson = value;
+      (val) {
         setState(() {
-          commentList =
-              commentJson.map((json) => Comment.fromJson(json)).toList();
+          commentList = val.map((json) => Comment.fromJson(json)).toList();
           hideLoadingOverlay();
         });
       },
@@ -153,7 +151,7 @@ class _ContentScreenState extends State<ContentScreen> {
                   CarouselSlider.builder(
                     itemCount: urlImages.length,
                     itemBuilder: (context, index, realIndex) {
-                      final urlImage = urlImages[index];
+                      final urlImage = widget.location.imageurl;
                       return buildImage(urlImage, index);
                     },
                     options: CarouselOptions(
@@ -196,12 +194,13 @@ class _ContentScreenState extends State<ContentScreen> {
                           children: [
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
                                   child: Text(
-                                    'Ayasofya Camii',
-                                    style: TextStyle(
+                                    widget.location.name,
+                                    style: const TextStyle(
                                         color: Colors.white, fontSize: 20),
                                   ),
                                 ),
@@ -239,7 +238,7 @@ class _ContentScreenState extends State<ContentScreen> {
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
             sliver: SliverToBoxAdapter(
               child: RatingBarIndicator(
-                rating: 3.5,
+                rating: widget.location.avaragerating.toDouble(),
                 itemBuilder: (context, index) => const Icon(
                   Icons.star,
                   color: Colors.amber,
@@ -250,13 +249,13 @@ class _ContentScreenState extends State<ContentScreen> {
               ),
             ),
           ),
-          const SliverPadding(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             sliver: SliverToBoxAdapter(
               child: Text(
-                "Ayasofya, eski adıyla Kutsal Bilgelik Kilisesi ve Ayasofya Müzesi veya günümüzdeki resmî adıyla Ayasofya-i Kebîr Câmi-i Şerîfi, İstanbul'da yer alan bir cami ve eski bazilika, katedral ve müzedir.",
-                style: TextStyle(fontSize: 18),
-              ), //Databaseden yazı gelecek.
+                widget.location.defination,
+                style: const TextStyle(fontSize: 18),
+              ),
             ),
           ),
           SliverList(
@@ -320,7 +319,7 @@ class _ContentScreenState extends State<ContentScreen> {
     );
   }
 
-  Widget buildImage(String urlImage, int index) => Image.asset(
+  Widget buildImage(String urlImage, int index) => Image.network(
         urlImage,
         fit: BoxFit.cover,
       );
