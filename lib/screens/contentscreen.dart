@@ -272,7 +272,7 @@ class _ContentScreenState extends State<ContentScreen> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          child: Container(
+                          child: SizedBox(
                             height: 40,
                             width: 40,
                             child: Image.asset(

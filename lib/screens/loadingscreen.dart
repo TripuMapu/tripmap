@@ -31,13 +31,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 LoginScreen.userid = val.data['userid'];
                 LoginScreen.email = val.data['email'];
                 LoginScreen.username = val.data['username'];
-                LoginScreen.profilepicture = val.data['profilepicture'];
-                LoginScreen.isArtist = val.data['isArtist'];
-                Navigator.of(context)
-                    .popAndPushNamed('/homepage', arguments: []);
+
+                Navigator.of(context).popAndPushNamed('/main', arguments: []);
               } else {
-                Navigator.of(context)
-                    .popAndPushNamed('/homepage', arguments: []);
+                Navigator.of(context).popAndPushNamed('/main', arguments: []);
               }
             },
           );
@@ -51,7 +48,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
             fontSize: 16.0,
           );
         } else {
-          Navigator.of(context).popAndPushNamed('/homepage', arguments: []);
+          Navigator.of(context).popAndPushNamed('/main', arguments: []);
         }
       },
     );
@@ -60,7 +57,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-
     tryToLogin();
   }
 

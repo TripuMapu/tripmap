@@ -9,7 +9,7 @@ class AuthService {
 
   login(username, password) async {
     try {
-      return await dio.post('http://localhost:8080/login',
+      return await dio.post('http://$ip:5554/login',
           data: {
             "username": username,
             "password": password,
@@ -50,7 +50,7 @@ class AuthService {
 
   getinfo(usertoken) async {
     try {
-      return await dio.get('http://localhost:8080/getinfo',
+      return await dio.get('http://$ip:5554/getinfo',
           options: Options(headers: {"Authorization": 'Bearer $usertoken'}));
     } on DioError catch (e) {
       Fluttertoast.showToast(
@@ -110,6 +110,19 @@ class AuthService {
   Future<List> gettypes() async {
     try {
       final res = await dio.post('http://$ip:5554/gettypes');
+      if (res.data['success']) {
+        return res.data['array'];
+      } else {
+        return List.empty();
+      }
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List> getalllocations() async {
+    try {
+      final res = await dio.post('http://$ip:5554/getalllocations');
       if (res.data['success']) {
         return res.data['array'];
       } else {

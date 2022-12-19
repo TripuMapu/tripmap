@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripmap/screens/contentscreen.dart';
-import 'package:tripmap/screens/homescreen.dart';
+import 'package:tripmap/screens/mainscreen.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/mapsample.dart';
 import 'package:tripmap/screens/registerscreen.dart';
@@ -217,9 +217,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
-                          Navigator.of(context).popUntil((route) => false);
-                          Navigator.of(context)
-                              .pushNamed('/main', arguments: []);
                           if (_formKey.currentState!.validate()) {
                             setState(() {
                               WidgetsBinding.instance.addPostFrameCallback(
@@ -240,13 +237,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         setState(() {
                                           hideLoadingOverlay();
                                         });
-                                        LoadingScreen.currentRoute =
-                                            '/homepage';
+                                        LoadingScreen.currentRoute = '/main';
                                         Navigator.of(context)
                                             .popUntil((route) => false);
-                                        Navigator.of(context).pushNamed(
-                                            '/homepage',
-                                            arguments: []);
+                                        Navigator.of(context)
+                                            .pushNamed('/main', arguments: []);
                                       } else {
                                         Fluttertoast.showToast(
                                           msg: val.data['msg'],
@@ -339,69 +334,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => LoadingScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: TextButton(
-                      child: const Text(
-                        'ContentScreen',
-                        style: TextStyle(
-                          color: Color(0xFF6c43BC),
-                        ),
-                      ),
-                      onPressed: () {
-                        /* Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ContentScreen(),
-                          ),
-                        ); */
-                      },
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: TextButton(
-                      child: const Text(
-                        'HomeScreen',
-                        style: TextStyle(
-                          color: Color(0xFF6c43BC),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: TextButton(
-                      child: const Text(
-                        'MapScreen',
-                        style: TextStyle(
-                          color: Color(0xFF6c43BC),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MapSample(),
                           ),
                         );
                       },

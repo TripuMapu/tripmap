@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripmap/screens/contentscreen.dart';
-import 'package:tripmap/screens/homescreen.dart';
+import 'package:tripmap/screens/loadingscreen.dart';
+import 'package:tripmap/screens/mainscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 
 class RouteGenerator {
@@ -9,12 +10,14 @@ class RouteGenerator {
 
     switch (settings.name) {
       case '/main':
-        return CustomPageRoute(child: const HomeScreen());
+        return CustomPageRoute(child: const MainScreen());
       case '/content':
         return CustomPageRoute(
             child: ContentScreen(
           location: args.elementAt(0),
         ));
+      case '/loading':
+        return CustomPageRoute(child: LoadingScreen());
 
       default:
         return CustomPageRoute(child: const LoginScreen());

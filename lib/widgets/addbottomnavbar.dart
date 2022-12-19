@@ -7,16 +7,13 @@ class AddBottomNavBar {
       Function(int index) function,
       List<BottomNavigationBarItem> bottomnavbaritems) {
     return BottomNavigationBar(
+      fixedColor: Color(0xff6C43BC),
       iconSize: 26,
-      selectedLabelStyle: const TextStyle(
-        fontWeight: FontWeight.bold,
-      ),
-      showUnselectedLabels: false,
       selectedIconTheme: const IconThemeData(
-        color: Color.fromARGB(255, 207, 107, 107),
+        color: Color(0xff6C43BC),
       ),
       unselectedIconTheme: const IconThemeData(
-        color: Color.fromARGB(175, 207, 107, 107),
+        color: Color(0xff6C43BC),
       ),
       type: BottomNavigationBarType.shifting,
       currentIndex: currentIndex,

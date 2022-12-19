@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tripmap/screens/loadingscreen.dart';
 
 class ProfileScreenEdit extends StatelessWidget {
   const ProfileScreenEdit({Key? key}) : super(key: key);
@@ -259,6 +261,24 @@ class ProfileScreenEdit extends StatelessWidget {
               ],
             ),
           ),
+          SliverPadding(
+            padding: EdgeInsets.all(30),
+            sliver: SliverToBoxAdapter(
+                child: ElevatedButton(
+              onPressed: () {
+                SharedPreferences.getInstance().then(
+                  (prefs) {
+                    prefs.setString('userName', '');
+                    prefs.setString('password', '');
+                  },
+                );
+                LoadingScreen.isLogined = false;
+                Navigator.of(context).popUntil((route) => false);
+                Navigator.of(context).pushNamed('/loading', arguments: []);
+              },
+              child: Text('çık'),
+            )),
+          )
         ],
       ),
     );
