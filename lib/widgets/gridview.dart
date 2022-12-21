@@ -95,8 +95,27 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                                   },
                                   blendMode: BlendMode.dstIn,
                                   child: Image.network(
-                                    typelocationslist[index].imageurl,
-                                    fit: BoxFit.fitHeight,
+                                    (typelocationslist[index].imageurls)[0],
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),

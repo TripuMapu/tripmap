@@ -64,12 +64,25 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return widget.currentindex == 1
         ? Scaffold(
+            backgroundColor: Colors.white,
             body: CustomScrollView(
               slivers: [
                 SliverAppBar(
+                  centerTitle: true,
                   backgroundColor: Colors.transparent,
+                  title: Container(
+                    transform: Matrix4.translationValues(0, 5, 0),
+                    width: 100,
+                    height: 30,
+                    child: Image.asset(
+                      'png/DuzLogo.PNG',
+                      height: 50,
+                      width: 60,
+                    ),
+                  ),
                   actions: [
                     IconButton(
+                        color: isHidden ? Colors.grey : Color(0xff6c43bc),
                         onPressed: () {
                           setState(() {
                             if (isHidden) {

@@ -39,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   double _prevAniValue = 0.0;
   final Color _foregroundOn = Colors.white;
   final Color _foregroundOff = Colors.black;
-  final Color _backgroundOn = Colors.blue;
-  final Color? _backgroundOff = Colors.grey[300];
+  final Color _backgroundOn = const Color(0xff6c43bc);
+  final Color _backgroundOff = Colors.white;
   final ScrollController _scrollController = ScrollController();
   final List _keys = [];
   bool _buttonTap = false;
@@ -50,19 +50,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   List<Widget> gridviewlist = [];
   List<Widget> scrollableviewlist = [];
 
-  void initializedata() async {
-    await AuthService().getdistricts().then((val) {
-      districtslist = val.map((json) => District.fromJson(json)).toList();
+  void initializedata(int districtid, bool isinitializing) async {
+    setState(() {
+      isFetched = false;
     });
-    await AuthService().getlocations(1).then((val) {
+    gridviewlist.clear();
+    scrollableviewlist.clear();
+    if (isinitializing) {
+      await AuthService().getdistricts().then((val) {
+        districtslist.clear();
+        districtslist = val.map((json) => District.fromJson(json)).toList();
+      });
+    }
+    await AuthService().getlocations(districtid).then((val) {
+      locationlist.clear();
       locationlist = val.map((json) => Location.fromJson(json)).toList();
     });
     await AuthService().gettypes().then((val) {
+      typelist.clear();
       typelist = val.map((json) => LocationType.fromJson(json)).toList();
     });
     for (int index = 0; index < typelist.length; index++) {
       // create a GlobalKey for each Tab
-      _keys.add(GlobalKey());
+      if (isinitializing) {
+        _keys.add(GlobalKey());
+      }
       gridviewlist.add(GridViewWidget(
         locationslist: locationlist,
         typeid: typelist[index].id,
@@ -72,27 +84,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         typeid: typelist[index].id,
       ));
     }
-    _controller = TabController(vsync: this, length: typelist.length);
-    _controller.animation!.addListener(_handleTabAnimation);
-    _controller.addListener(_handleTabChange);
-    _animationControllerOff = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 75));
-    _animationControllerOff.value = 1.0;
-    _colorTweenBackgroundOff =
-        ColorTween(begin: _backgroundOn, end: _backgroundOff)
-            .animate(_animationControllerOff);
-    _colorTweenForegroundOff =
-        ColorTween(begin: _foregroundOn, end: _foregroundOff)
-            .animate(_animationControllerOff);
-    _animationControllerOn = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 150));
-    _animationControllerOn.value = 1.0;
-    _colorTweenBackgroundOn =
-        ColorTween(begin: _backgroundOff, end: _backgroundOn)
-            .animate(_animationControllerOn);
-    _colorTweenForegroundOn =
-        ColorTween(begin: _foregroundOff, end: _foregroundOn)
-            .animate(_animationControllerOn);
+    if (isinitializing) {
+      _controller = TabController(vsync: this, length: typelist.length);
+      _controller.animation!.addListener(_handleTabAnimation);
+      _controller.addListener(_handleTabChange);
+      _animationControllerOff = AnimationController(
+          vsync: this, duration: const Duration(milliseconds: 75));
+      _animationControllerOff.value = 1.0;
+      _colorTweenBackgroundOff =
+          ColorTween(begin: _backgroundOn, end: _backgroundOff)
+              .animate(_animationControllerOff);
+      _colorTweenForegroundOff =
+          ColorTween(begin: _foregroundOn, end: _foregroundOff)
+              .animate(_animationControllerOff);
+      _animationControllerOn = AnimationController(
+          vsync: this, duration: const Duration(milliseconds: 150));
+      _animationControllerOn.value = 1.0;
+      _colorTweenBackgroundOn =
+          ColorTween(begin: _backgroundOff, end: _backgroundOn)
+              .animate(_animationControllerOn);
+      _colorTweenForegroundOn =
+          ColorTween(begin: _foregroundOff, end: _foregroundOn)
+              .animate(_animationControllerOn);
+    }
+
     setState(() {
       hideLoadingOverlay();
       isFetched = true;
@@ -141,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     if (widget.currentindex == 0) {
       super.initState();
       WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
-      initializedata();
+      initializedata(1, true);
     }
   }
 
@@ -157,147 +172,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ? NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
-                SliverPadding(
-                  padding: const EdgeInsets.only(top: 20),
-                  sliver: SliverToBoxAdapter(
-                    child: SizedBox(
-                        height: 49.0,
-                        // this generates our tabs buttons
-                        child: ListView.builder(
-                            // this gives the TabBar a bounce effect when scrolling farther than it's size
-                            physics: BouncingScrollPhysics(),
-                            controller: _scrollController,
-                            // make the list horizontal
-                            scrollDirection: Axis.horizontal,
-                            // number of tabs
-                            itemCount: typelist.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                  // each button's key
-                                  key: _keys[index],
-                                  // padding for the buttons
-                                  padding: EdgeInsets.all(6.0),
-                                  child: ButtonTheme(
-                                      child: AnimatedBuilder(
-                                    animation: _colorTweenBackgroundOn,
-                                    builder: (context, child) => ElevatedButton(
-                                        // get the color of the button's background (dependent of its state)
-                                        // make the button a rectangle with round corners
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    _getBackgroundColor(
-                                                        index))),
-                                        onPressed: () {
-                                          setState(() {
-                                            _buttonTap = true;
-                                            // trigger the controller to change between Tab Views
-                                            _controller.animateTo(index);
-                                            // set the current index
-                                            _setCurrentIndex(index);
-                                            // scroll to the tapped button (needed if we tap the active button and it's not on its position)
-                                            _scrollTo(index);
-                                          });
-                                        },
-                                        child: Text(
-                                          // get the icon
-                                          typelist[index].name,
-                                          // get the color of the icon (dependent of its state)
-                                        )),
-                                  )));
-                            })),
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: Divider(
-                    height: 5,
-                    thickness: 1,
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 200,
-                    color: Colors.white,
-                    child: ListView.builder(
-                      clipBehavior: Clip.none,
-                      itemCount: districtslist.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _currentDistrictIndex =
-                                    index; //gridviewda gelen veriyi değiştir
-                              });
-                            },
-                            child: Container(
-                              width: 125,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: _currentDistrictIndex == index
-                                      ? Colors.blue
-                                      : Colors.white,
-                                  width: 1.5,
-                                ),
-                              ),
-                              child: Stack(
-                                children: [
-                                  SizedBox(
-                                    height: 200,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.network(
-                                        districtslist[index].districtimageurl,
-                                        fit: BoxFit.fitHeight,
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          color: Color.fromARGB(113, 0, 0, 0),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                        ),
-                                        height: 25,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(5),
-                                              child: Text(
-                                                districtslist[index]
-                                                    .districtname,
-                                                style: const TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+                SliverAppBar(
+                  centerTitle: true,
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  title: Container(
+                    transform: Matrix4.translationValues(0, 5, 0),
+                    width: 120,
+                    height: 35,
+                    child: Image.asset(
+                      'png/DuzLogo.PNG',
                     ),
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: Divider(
-                    height: 5,
-                    thickness: 1,
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -311,14 +196,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('En Popülerler'),
+                              Text(
+                                'En Popülerler',
+                                style: TextStyle(fontSize: 15),
+                              ),
                               TextButton(
-                                  onPressed: () {}, child: Text('Tümünü Gör'))
+                                onPressed: () {},
+                                child: Text('Tümünü Gör',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: Color(0xff6c43bc))),
+                              )
                             ],
                           ),
                         ),
                         Container(
-                          height: 250,
+                          height: 225,
                           color: Colors.white,
                           child: ListView.builder(
                               clipBehavior: Clip.none,
@@ -326,7 +219,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
                                 return Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 5),
                                   child: InkWell(
                                     onTap: (() {
                                       Navigator.of(context)
@@ -336,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       borderRadius: BorderRadius.circular(10),
                                       child: Container(
                                         width: 300,
-                                        height: 250,
+                                        height: 225,
                                         color: Colors.black,
                                         child: Stack(
                                           children: [
@@ -400,17 +294,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   ),
                                                 ),
                                                 Container(
-                                                  height: 30,
+                                                  height: 40,
                                                   color: const Color.fromARGB(
                                                       113, 0, 0, 0),
                                                   child: Row(
                                                     children: const [
                                                       Padding(
                                                           padding:
-                                                              EdgeInsets.all(5),
+                                                              EdgeInsets.all(
+                                                                  10),
                                                           child: Text(
                                                             'Ayasofya',
                                                             style: TextStyle(
+                                                                fontSize: 15,
                                                                 color: Colors
                                                                     .white),
                                                           )),
@@ -431,11 +327,167 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(
-                  child: Divider(
-                    height: 5,
-                    thickness: 1,
+                SliverToBoxAdapter(
+                  child: Container(
+                    height: 175,
+                    color: Colors.white,
+                    child: ListView.builder(
+                      clipBehavior: Clip.none,
+                      itemCount: districtslist.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _currentDistrictIndex = index;
+                                showLoadingOverlay();
+                                initializedata(
+                                    districtslist[index].districtid, false);
+                              });
+                            },
+                            child: Container(
+                              width: 125,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: _currentDistrictIndex == index
+                                      ? Color(0xff6c43bc)
+                                      : Colors.white,
+                                  width: 2,
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    height: 175,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(6),
+                                      child: Image.network(
+                                        districtslist[index].districtimageurl,
+                                        fit: BoxFit.fitHeight,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              value: loadingProgress
+                                                          .expectedTotalBytes !=
+                                                      null
+                                                  ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromARGB(113, 0, 0, 0),
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        height: 25,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
+                                              child: Text(
+                                                districtslist[index]
+                                                    .districtname,
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                      height: 49.0,
+                      // this generates our tabs buttons
+                      child: ListView.builder(
+                          // this gives the TabBar a bounce effect when scrolling farther than it's size
+                          physics: BouncingScrollPhysics(),
+                          controller: _scrollController,
+                          // make the list horizontal
+                          scrollDirection: Axis.horizontal,
+                          // number of tabs
+                          itemCount: typelist.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                                // each button's key
+                                key: _keys[index],
+                                // padding for the buttons
+                                padding: const EdgeInsets.all(6.0),
+                                child: ButtonTheme(
+                                    child: AnimatedBuilder(
+                                  animation: _colorTweenBackgroundOn,
+                                  builder: (context, child) => ElevatedButton(
+                                      // get the color of the button's background (dependent of its state)
+                                      // make the button a rectangle with round corners
+                                      style: ButtonStyle(
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: const BorderSide(
+                                                  color: Color(0xff6c43bc)),
+                                            ),
+                                          ),
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  _getBackgroundColor(index))),
+                                      onPressed: () {
+                                        setState(() {
+                                          _buttonTap = true;
+                                          // trigger the controller to change between Tab Views
+                                          _controller.animateTo(index);
+                                          // set the current index
+                                          _setCurrentIndex(index);
+                                          // scroll to the tapped button (needed if we tap the active button and it's not on its position)
+                                          _scrollTo(index);
+                                        });
+                                      },
+                                      child: Text(
+                                        // get the icon
+                                        typelist[index].name,
+                                        style: TextStyle(
+                                            color: index == _currentIndex
+                                                ? Colors.white
+                                                : const Color(0xff6c43bc)),
+                                        // get the color of the icon (dependent of its state)
+                                      )),
+                                )));
+                          })),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(

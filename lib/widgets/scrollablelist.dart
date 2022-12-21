@@ -70,8 +70,27 @@ class _ScrollableListWidgetState extends State<ScrollableListWidget> {
                                 height: 175,
                                 width: 120,
                                 child: Image.network(
-                                  typelocationslist[index].imageurl,
+                                  (typelocationslist[index].imageurls)[0],
                                   fit: BoxFit.cover,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes!
+                                            : null,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),

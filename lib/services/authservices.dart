@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthService {
-  String ip = "192.168.1.78";
+  String ip = "192.168.1.12";
   // ignore: unnecessary_new
   Dio dio = new Dio();
 

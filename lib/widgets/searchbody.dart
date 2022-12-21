@@ -20,7 +20,9 @@ class SearchBody extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
             child: Container(
-              color: const Color.fromARGB(255, 236, 236, 236),
+              /* decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Color(0xff6c43bc), width: 1)), */
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -31,14 +33,14 @@ class SearchBody extends StatelessWidget {
                         height: 50,
                         width: 70,
                         child: Image.network(
-                          locations[index].imageurl,
+                          (locations[index].imageurls)[1],
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(6, 10, 3, 5),
+                        padding: const EdgeInsets.fromLTRB(10, 10, 3, 5),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -48,7 +50,8 @@ class SearchBody extends StatelessWidget {
                                 Text(
                                   locations[index].name,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 15),
                                 ),
                               ],
                             ),

@@ -18,13 +18,6 @@ class _ContentScreenState extends State<ContentScreen> {
   OverlayEntry? entry;
   int activeIndex = 0;
   List<Comment> commentList = [];
-  final urlImages = [
-    'png/ayasofya.jpg',
-    'png/ayasofya1.jpg',
-    'png/ayasofya2.jpg',
-    'png/ayasofya3.jpg',
-    'png/ayasofya4.jpg'
-  ];
   bool isBookmarked = false;
 
   void getComments() async {
@@ -149,10 +142,10 @@ class _ContentScreenState extends State<ContentScreen> {
               child: Stack(
                 children: [
                   CarouselSlider.builder(
-                    itemCount: urlImages.length,
+                    itemCount: (widget.location.imageurls).length,
                     itemBuilder: (context, index, realIndex) {
-                      final urlImage = widget.location.imageurl;
-                      return buildImage(urlImage, index);
+                      final urlImage = widget.location.imageurls;
+                      return buildImage(urlImage[index], index);
                     },
                     options: CarouselOptions(
                         height: 450,
@@ -326,7 +319,7 @@ class _ContentScreenState extends State<ContentScreen> {
 
   Widget buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
-        count: urlImages.length,
+        count: (widget.location.imageurls).length,
         effect: const ScrollingDotsEffect(
           dotColor: Color.fromARGB(131, 255, 255, 255),
           activeDotColor: Colors.white,

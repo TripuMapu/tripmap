@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/globals.dart' as globals;
 
 class PolylineScreen extends StatefulWidget {
-  const PolylineScreen({Key? key}) : super(key: key);
+  final int currentindex;
+  const PolylineScreen({Key? key, required this.currentindex})
+      : super(key: key);
 
   @override
   State<PolylineScreen> createState() => _PolylineScreenState();
@@ -18,8 +18,8 @@ class _PolylineScreenState extends State<PolylineScreen> {
   final Completer<GoogleMapController> _controller = Completer();
 
   LatLng sourceLocation = const LatLng(41.015137, 28.979530);
-  bool isFetched = false;
-  late Position currentLocation;
+  bool isFetched = true;
+  //late Position currentLocation;
   LatLng destination = const LatLng(41.008469, 28.980261);
   //List<LatLng> polyLineCoordinates = [];
 
@@ -27,19 +27,18 @@ class _PolylineScreenState extends State<PolylineScreen> {
   List<LatLng> polyLineCoordinates = [];
   late PolylinePoints polylinePoints;
 
-  void getCurrentLocation() async {
+  /*  void getCurrentLocation() async {
     currentLocation = await globals.deviceLocation;
     setState(() {
       isFetched = true;
       hideLoadingOverlay();
     });
-  }
+  } */
 
   void getPolyPoints() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         "AIzaSyB3Wa2VPWoLEPCvCyomq23hsRtaz8RH8sQ",
-        PointLatLng(isFetched ? currentLocation.longitude : 41.015137,
-            isFetched ? currentLocation.latitude : 28.979530),
+        PointLatLng(41.015137, 28.979530),
         PointLatLng(destination.longitude, destination.latitude),
         travelMode: TravelMode.driving);
     if (result.status == 'OK') {
@@ -85,10 +84,10 @@ class _PolylineScreenState extends State<PolylineScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
-    getCurrentLocation();
-    getPolyPoints();
-    polylinePoints = PolylinePoints();
+    //WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
+    // getCurrentLocation();
+    //getPolyPoints();
+    //polylinePoints = PolylinePoints();
   }
 
   @override
@@ -102,11 +101,10 @@ class _PolylineScreenState extends State<PolylineScreen> {
           Marker(markerId: MarkerId("destination"), position: destination),
           Marker(
               markerId: MarkerId("currentLocation"),
-              position: LatLng(isFetched ? currentLocation.latitude : 41.015137,
-                  isFetched ? currentLocation.longitude : 28.979530))
+              position: LatLng(41.015137, 28.979530))
         },
-        onMapCreated: (controller) =>
-            {_controller.complete(controller), getPolyPoints()},
+        /*    onMapCreated: (controller) =>
+            {_controller.complete(controller), getPolyPoints()}, */
       ),
     );
   }

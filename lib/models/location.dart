@@ -3,7 +3,7 @@ class Location {
   final int locationtypeid;
   final int locationdistrictid;
   final String name;
-  final String imageurl;
+  final List<String> imageurls;
   final String defination;
   final String coordinate;
   final int avaragerating;
@@ -13,7 +13,7 @@ class Location {
     required this.locationtypeid,
     required this.locationdistrictid,
     required this.name,
-    required this.imageurl,
+    required this.imageurls,
     required this.defination,
     required this.coordinate,
     required this.avaragerating,
@@ -24,7 +24,7 @@ class Location {
         locationtypeid: json['locationTypeId'],
         locationdistrictid: json['locationDistrictId'],
         name: json['locationName'],
-        imageurl: json['locationImageUrl'],
+        imageurls: List<String>.from(json['locationImageUrl']),
         defination: json['locationDefination'],
         coordinate: json['locationCoordinate'],
         avaragerating: json['locationAvarageRating'],

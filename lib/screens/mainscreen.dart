@@ -3,6 +3,7 @@ import 'package:tripmap/screens/homescreen.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 import 'package:tripmap/screens/mapsample.dart';
+import 'package:tripmap/screens/polyline_screen.dart';
 import 'package:tripmap/screens/profilescreen.dart';
 import 'package:tripmap/screens/searchscreen.dart';
 import 'package:tripmap/widgets/addbottomnavbar.dart';
@@ -74,7 +75,7 @@ class _MainScreenState extends State<MainScreen>
             SearchScreen(
               currentindex: currentIndex,
             ),
-            MapSample(
+            PolylineScreen(
               currentindex: currentIndex,
             ),
             LoadingScreen.isLogined

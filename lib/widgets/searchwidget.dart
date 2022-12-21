@@ -32,16 +32,16 @@ class _SearchWidgetState extends State<SearchWidget> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
-        border: Border.all(color: Colors.black26),
+        border: Border.all(color: Color(0xff6c43bc)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
-          icon: Icon(Icons.search, color: style.color),
+          icon: const Icon(Icons.search, color: Color(0xff6c43bc)),
           suffixIcon: widget.text.isNotEmpty
               ? GestureDetector(
-                  child: Icon(Icons.close, color: style.color),
+                  child: const Icon(Icons.close, color: Color(0xff6c43bc)),
                   onTap: () {
                     controller.clear();
                     widget.onChanged('');
