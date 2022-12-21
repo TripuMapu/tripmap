@@ -19,62 +19,60 @@ class SearchBody extends StatelessWidget {
               .pushNamed('/content', arguments: [locations[index]]),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
-            child: Container(
-              /* decoration: BoxDecoration(
+
+            /* decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Color(0xff6c43bc), width: 1)), */
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: SizedBox(
-                        height: 50,
-                        width: 70,
-                        child: Image.network(
-                          (locations[index].imageurls)[1],
-                          fit: BoxFit.cover,
-                        ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: SizedBox(
+                      height: 50,
+                      width: 70,
+                      child: Image.network(
+                        (locations[index].imageurls)[0],
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 3, 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  locations[index].name,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 5),
-                              child: RatingBarIndicator(
-                                rating:
-                                    locations[index].avaragerating.toDouble(),
-                                itemBuilder: (context, index) => const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                itemCount: 5,
-                                itemSize: 17,
-                                direction: Axis.horizontal,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 3, 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                locations[index].name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
                               ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: RatingBarIndicator(
+                              rating: locations[index].avaragerating.toDouble(),
+                              itemBuilder: (context, index) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              itemCount: 5,
+                              itemSize: 17,
+                              direction: Axis.horizontal,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

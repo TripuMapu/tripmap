@@ -151,10 +151,15 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.all(5),
-                                          child: Text(
-                                            typelocationslist[index].name,
-                                            style: const TextStyle(
-                                                color: Colors.white),
+                                          child: SizedBox(
+                                            width: 125,
+                                            child: Text(
+                                              typelocationslist[index].name,
+                                              overflow: TextOverflow.ellipsis,
+                                              softWrap: false,
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                         Padding(
@@ -179,7 +184,7 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                                         ),
                                       ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ],

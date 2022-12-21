@@ -67,6 +67,7 @@ class _MainScreenState extends State<MainScreen>
         }, bottomnavbaritems),
         backgroundColor: Colors.white,
         body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
           children: [
             HomeScreen(
