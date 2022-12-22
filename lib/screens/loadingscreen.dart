@@ -5,10 +5,11 @@ import 'package:tripmap/screens/loginscreen.dart';
 import 'package:tripmap/services/authservices.dart';
 import 'package:tripmap/services/gradienttext.dart';
 
+// ignore: must_be_immutable
 class LoadingScreen extends StatefulWidget {
   static bool isLogined = false;
   static String currentRoute = '/homepage';
-  const LoadingScreen({Key? key}) : super(key: key);
+  LoadingScreen({Key? key}) : super(key: key);
 
   @override
   State<LoadingScreen> createState() => _LoadingScreenState();
@@ -31,6 +32,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 LoginScreen.userid = val.data['userid'];
                 LoginScreen.email = val.data['email'];
                 LoginScreen.username = val.data['username'];
+                LoginScreen.profilepicture = val.data['profilepicture'];
+                LoginScreen.fullname = val.data['fullname'];
 
                 Navigator.of(context).popAndPushNamed('/main', arguments: []);
               } else {

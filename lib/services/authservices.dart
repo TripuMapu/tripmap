@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthService {
-  String ip = "10.44.5.17";
+  String ip = "192.168.1.11";
   // ignore: unnecessary_new
   Dio dio = new Dio();
 
@@ -128,6 +128,31 @@ class AuthService {
       } else {
         return List.empty();
       }
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List> getbookmarks(int id) async {
+    try {
+      final res = await dio.post('http://$ip:5554/getbookmarks', data: {
+        'userid': id,
+      });
+      if (res.data['success']) {
+        return res.data['array'];
+      } else {
+        return List.empty();
+      }
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  getonefromlocations(locationid) async {
+    try {
+      final res = await dio.post('http://$ip:5554/getonefromlocations',
+          data: {'locationId': locationid});
+      return res.data['location'];
     } on DioError catch (e) {
       rethrow;
     }

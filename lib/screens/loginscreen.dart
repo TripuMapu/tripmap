@@ -8,7 +8,7 @@ import 'package:tripmap/services/authservices.dart';
 export 'loginscreen.dart';
 
 class LoginScreen extends StatefulWidget {
-  static var username, email, profilepicture, userid;
+  static var username, email, profilepicture, userid, fullname;
   static bool isArtist = false;
 
   const LoginScreen({Key? key}) : super(key: key);

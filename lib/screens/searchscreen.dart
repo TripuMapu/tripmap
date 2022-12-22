@@ -26,7 +26,9 @@ class _SearchScreenState extends State<SearchScreen> {
     await AuthService().getalllocations().then((val) {
       alllocations = val.map((json) => Location.fromJson(json)).toList();
       dummylocations = alllocations;
-      setState(() {});
+      setState(() {
+        hideLoadingOverlay();
+      });
     });
   }
 
@@ -34,9 +36,34 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     if (widget.currentindex == 1) {
       super.initState();
+      WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
       getlocations();
     }
   }
+
+  void showLoadingOverlay() {
+    final overlay = Overlay.of(context)!;
+
+    entry = OverlayEntry(
+      builder: (context) => buildLoadingOverlay(),
+    );
+
+    overlay.insert(entry!);
+  }
+
+  void hideLoadingOverlay() {
+    entry!.remove();
+    entry = null;
+  }
+
+  Widget buildLoadingOverlay() => const Material(
+        color: Colors.transparent,
+        elevation: 8,
+        child: Center(
+          child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 163, 171, 192)),
+        ),
+      );
 
   Widget buildSearch() {
     return SearchWidget(
