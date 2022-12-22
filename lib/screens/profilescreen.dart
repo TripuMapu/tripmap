@@ -251,281 +251,148 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Row(
-                    children: [
-                      Container(
-                        transform: Matrix4.translationValues(40, 30, 0),
-                        child: const Text(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
                           "Rotalarım",
                           style: TextStyle(color: Colors.black),
                         ),
-                      ),
-                      Container(
-                        transform: Matrix4.translationValues(200, 30, 0),
-                        child: TextButton(
+                        TextButton(
                           onPressed: () {},
-                          child: TextButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "Tüm Rotalarım",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  decoration: TextDecoration.underline),
-                            ),
+                          child: const Text(
+                            "Tüm Rotalarım",
+                            style: TextStyle(
+                                color: Colors.black,
+                                decoration: TextDecoration.underline),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0),
-                    child: Row(
-                      children: [
-                        Container(
-                          transform: Matrix4.translationValues(30, 18, 0),
-                          //   color: Colors.black,
-                          width: 338,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color.fromRGBO(108, 67, 188, 1),
-                                Color(0xFF72DFC5),
-                              ],
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(1),
-                            child: Container(
-                              width: 65,
-                              height: 260,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    transform:
-                                        Matrix4.translationValues(10, 0, 0),
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                            colors: [
-                                              Color.fromRGBO(108, 67, 188, 1),
-                                              Color(0xFF72DFC5)
-                                            ]),
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          transform: Matrix4.translationValues(
-                                              0, 8, 0),
-                                          child: const Text(
-                                            "JAN",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
-                                          ),
-                                        ),
-                                        Container(
-                                          transform: Matrix4.translationValues(
-                                              0, 8, 0),
-                                          child: const Text(
-                                            "17",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 255,
-                                    transform:
-                                        Matrix4.translationValues(20, 0, 0),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "Galata Kulesi",
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                        Icon(LineAwesomeIcons.arrow_right),
-                                        Text(
-                                          " ... ",
-                                          style: const TextStyle(fontSize: 18),
-                                        ),
-                                        Icon(LineAwesomeIcons.arrow_right),
-                                        Text(
-                                          "Ayasofya Camii",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              transform: Matrix4.translationValues(-52, 38, 0),
-                              width: 73,
-                              height: 30,
-                              alignment: Alignment.topCenter,
-                              child: TextButton(
-                                onPressed: () {},
-                                child: const Text(
-                                  "Rotayı Görüntüle",
-                                  style: TextStyle(
-                                      fontSize: 7.5,
-                                      decoration: TextDecoration.underline,
-                                      color: Color(0xFF6C43BC)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        )
                       ],
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Row(
-                      children: [
-                        Container(
-                          transform: Matrix4.translationValues(30, 18, 0),
-                          //   color: Colors.black,
-                          width: 338,
-                          height: 70,
+                SliverList(
+                    delegate: SliverChildBuilderDelegate(childCount: 2,
+                        ((context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        gradient: const LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            Color(0xFF6C43BC),
+                            Color(0xFF72DFC5),
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color(0xFF6C43BC),
-                                Color(0xFF72DFC5),
-                              ],
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(1),
-                            child: Container(
-                              width: 65,
-                              height: 260,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    transform:
-                                        Matrix4.translationValues(10, 0, 0),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
                                     width: 50,
                                     height: 50,
-                                    decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
-                                          colors: [
-                                            Color(0xFF6C43BC),
-                                            Color(0xFF72DFC5),
-                                          ],
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "OCT",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15),
                                         ),
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
+                                        Text("23",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15))
+                                      ],
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          Color(0xFF6C43BC),
+                                          Color(0xFF72DFC5),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                                     child: Column(
                                       children: [
-                                        Container(
-                                          transform: Matrix4.translationValues(
-                                              0, 8, 0),
-                                          child: const Text(
-                                            "OCT",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(10, 10, 0, 8),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Galata Kulesi",
+                                                style: const TextStyle(
+                                                    fontSize: 14),
+                                              ),
+                                              Icon(
+                                                  LineAwesomeIcons.arrow_right),
+                                              Text(
+                                                " ... ",
+                                                style: const TextStyle(
+                                                    fontSize: 18),
+                                              ),
+                                              Icon(
+                                                  LineAwesomeIcons.arrow_right),
+                                              Text(
+                                                "Ayasofya Camii",
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Container(
-                                          transform: Matrix4.translationValues(
-                                              0, 8, 0),
-                                          child: const Text(
-                                            "23",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15),
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            InkWell(
+                                              //splashFactory: ,
+                                              onTap: () {},
+                                              child: Text(
+                                                "Rotayi Goruntule",
+                                                style: TextStyle(
+                                                    fontSize: 9,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    color: const Color(
+                                                        0xFF6C43BC)),
+                                              ),
+                                            ),
+                                          ],
                                         )
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    width: 255,
-                                    transform:
-                                        Matrix4.translationValues(20, 0, 0),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "Taksim Meydanı",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                        Icon(LineAwesomeIcons.arrow_right),
-                                        Text(
-                                          " ... ",
-                                          style: TextStyle(fontSize: 18),
-                                        ),
-                                        Icon(LineAwesomeIcons.arrow_right),
-                                        Text(
-                                          "Kuzguncuk",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Container(
-                              transform: Matrix4.translationValues(-52, 38, 0),
-                              width: 73,
-                              height: 30,
-                              alignment: Alignment.topCenter,
-                              child: TextButton(
-                                onPressed: () {},
-                                child: const Text(
-                                  "Rotayı Görüntüle",
-                                  style: TextStyle(
-                                    fontSize: 7.5,
-                                    decoration: TextDecoration.underline,
-                                    color: Color(0xFF6C43BC),
-                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                              ]),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                })))
               ],
             ),
           )

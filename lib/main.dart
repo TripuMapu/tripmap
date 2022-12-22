@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tripmap/routegenerator.dart';
+import 'package:tripmap/screens/bookmarkscreen.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 
