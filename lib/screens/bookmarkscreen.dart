@@ -24,15 +24,23 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             elevation: 0,
             backgroundColor: Colors.transparent,
             title: Padding(
-              padding: const EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.only(top: 15.0),
               child: Text(
-                "Bookmarks",
+                "Kaydedilenler",
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.normal,
-                  foreground: Paint()..shader = linearGradient,
+                  // foreground: Paint()..shader = linearGradient,
+                  color: Color(0xFF6C43BC),
                 ),
               ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Divider(
+              height: 5,
+              thickness: 2,
+              color: Color(0xFF6C43BC),
             ),
           ),
           SliverList(
@@ -80,8 +88,16 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                               "Fener Rum Lisesi",
                               style: TextStyle(
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.normal,
                               ),
+                            ),
+                            IconButton(
+                              padding: EdgeInsets.only(left: 100),
+                              onPressed: () {},
+                              icon: Icon(Icons.bookmark_outline),
+                              color: Color(0xFF6C43BC),
+                              focusColor: Color(0xFF6C43BC),
+                              iconSize: 32.5,
                             )
                           ],
                         ),

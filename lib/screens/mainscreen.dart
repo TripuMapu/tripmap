@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripmap/screens/bookmarkscreen.dart';
 import 'package:tripmap/screens/homescreen.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
@@ -31,6 +32,12 @@ class _MainScreenState extends State<MainScreen>
       label: 'Arama',
       icon: Icon(
         Icons.search_outlined,
+      ),
+    ),
+    BottomNavigationBarItem(
+      label: 'Kaydedilenler',
+      icon: Icon(
+        Icons.bookmark_outline,
       ),
     ),
     BottomNavigationBarItem(
@@ -76,6 +83,7 @@ class _MainScreenState extends State<MainScreen>
             SearchScreen(
               currentindex: currentIndex,
             ),
+            BookmarkScreen(),
             PolylineScreen(
               currentindex: currentIndex,
             ),

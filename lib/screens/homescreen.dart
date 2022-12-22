@@ -8,6 +8,7 @@ import 'package:tripmap/models/location.dart';
 import 'package:tripmap/models/locationtype.dart';
 import 'package:tripmap/routegenerator.dart';
 import 'package:tripmap/screens/contentscreen.dart';
+import 'package:tripmap/screens/showallscreen.dart';
 import 'package:tripmap/services/authservices.dart';
 
 import 'package:tripmap/widgets/gridview.dart';
@@ -333,7 +334,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             children: [
                               const Text('En Popülerler'),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: ((context) => ShowAllScreen()),
+                                    ),
+                                  );
+                                },
                                 child: const Text(
                                   'Tümünü Gör',
                                   style: TextStyle(color: Color(0xFF6C43BC)),
