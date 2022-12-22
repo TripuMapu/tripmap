@@ -17,7 +17,7 @@ class RouteGenerator {
           location: args.elementAt(0),
         ));
       case '/loading':
-        return CustomPageRoute(child: LoadingScreen());
+        return CustomPageRoute(child: const LoadingScreen());
 
       default:
         return CustomPageRoute(child: const LoginScreen());

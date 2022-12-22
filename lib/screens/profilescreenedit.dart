@@ -25,6 +25,23 @@ class ProfileScreenEdit extends StatelessWidget {
               icon: const Icon(LineAwesomeIcons.arrow_left),
               color: const Color(0xFF6C43BC),
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  SharedPreferences.getInstance().then(
+                    (prefs) {
+                      prefs.setString('userName', '');
+                      prefs.setString('password', '');
+                    },
+                  );
+                  LoadingScreen.isLogined = false;
+                  Navigator.of(context).popUntil((route) => false);
+                  Navigator.of(context).pushNamed('/loading', arguments: []);
+                },
+                icon: const Icon(Icons.logout),
+                color: const Color(0xFF6C43BC),
+              )
+            ],
             title: Container(
               transform: Matrix4.translationValues(0, 5, 0),
               width: 100,
@@ -261,24 +278,6 @@ class ProfileScreenEdit extends StatelessWidget {
               ],
             ),
           ),
-          SliverPadding(
-            padding: EdgeInsets.all(30),
-            sliver: SliverToBoxAdapter(
-                child: ElevatedButton(
-              onPressed: () {
-                SharedPreferences.getInstance().then(
-                  (prefs) {
-                    prefs.setString('userName', '');
-                    prefs.setString('password', '');
-                  },
-                );
-                LoadingScreen.isLogined = false;
-                Navigator.of(context).popUntil((route) => false);
-                Navigator.of(context).pushNamed('/loading', arguments: []);
-              },
-              child: Text('çık'),
-            )),
-          )
         ],
       ),
     );

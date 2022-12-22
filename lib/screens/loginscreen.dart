@@ -100,13 +100,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelText: 'Kullanıcı Adı',
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
-                          borderSide:
-                              const BorderSide(color: Color(0xFF6C43BC)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF6C43BC),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
-                          borderSide:
-                              const BorderSide(color: Color(0xFF72DFC5)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF72DFC5),
+                          ),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -139,13 +141,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelText: 'Şifre',
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
-                          borderSide:
-                              const BorderSide(color: Color(0xFF6C43BC)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF6C43BC),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
-                          borderSide:
-                              const BorderSide(color: Color(0xFF72DFC5)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF72DFC5),
+                          ),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -218,10 +222,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              WidgetsBinding.instance.addPostFrameCallback(
-                                  (_) => showLoadingOverlay());
-                            });
+                            setState(
+                              () {
+                                WidgetsBinding.instance.addPostFrameCallback(
+                                    (_) => showLoadingOverlay());
+                              },
+                            );
                             AuthService().login(username, password).then(
                               (val) {
                                 if (val.data['success']) {
@@ -234,9 +240,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         LoginScreen.username =
                                             val.data['username'];
                                         _handleRemeberme();
-                                        setState(() {
-                                          hideLoadingOverlay();
-                                        });
+                                        setState(
+                                          () {
+                                            hideLoadingOverlay();
+                                          },
+                                        );
                                         LoadingScreen.currentRoute = '/main';
                                         Navigator.of(context)
                                             .popUntil((route) => false);
@@ -252,9 +260,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                           textColor: Colors.white,
                                           fontSize: 16.0,
                                         );
-                                        setState(() {
-                                          hideLoadingOverlay();
-                                        });
+                                        setState(
+                                          () {
+                                            hideLoadingOverlay();
+                                          },
+                                        );
                                       }
                                     },
                                   );
@@ -268,9 +278,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     textColor: Colors.white,
                                     fontSize: 16.0,
                                   );
-                                  setState(() {
-                                    hideLoadingOverlay();
-                                  });
+                                  setState(
+                                    () {
+                                      hideLoadingOverlay();
+                                    },
+                                  );
                                 }
                               },
                             );
