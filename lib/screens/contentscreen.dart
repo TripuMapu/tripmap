@@ -90,11 +90,12 @@ class _ContentScreenState extends State<ContentScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'GİT',
-                      style: TextStyle(color: Colors.white),
-                    )),
+                  onPressed: () {},
+                  child: const Text(
+                    'GİT',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
             ),
             const Padding(
@@ -147,14 +148,15 @@ class _ContentScreenState extends State<ContentScreen> {
                       return buildImage(urlImage[index], index);
                     },
                     options: CarouselOptions(
-                        height: 450,
-                        enlargeCenterPage: true,
-                        enlargeStrategy: CenterPageEnlargeStrategy.height,
-                        viewportFraction: 1,
-                        autoPlay: true,
-                        autoPlayInterval: const Duration(seconds: 10),
-                        onPageChanged: (index, reason) =>
-                            setState(() => activeIndex = index)),
+                      height: 450,
+                      enlargeCenterPage: true,
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
+                      viewportFraction: 1,
+                      autoPlay: true,
+                      autoPlayInterval: const Duration(seconds: 10),
+                      onPageChanged: (index, reason) =>
+                          setState(() => activeIndex = index),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 60.0),
