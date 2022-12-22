@@ -76,13 +76,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: Image.asset('png/Login_Logo.png'),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 250),
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Image.asset('png/Login_Logo.png'),
+                  ),
                 ),
-                const SizedBox(height: 300),
-                const CircularProgressIndicator(color: Color(0xFF6C43BC)),
-                const SizedBox(height: 10),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: CircularProgressIndicator(
+                    color: Color(0xFF6C43BC),
+                  ),
+                ),
                 Container(
                   alignment: Alignment.bottomCenter,
                   child: const GradientText(
