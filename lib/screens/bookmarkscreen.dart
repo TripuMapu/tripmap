@@ -1,17 +1,21 @@
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tripmap/screens/profilescreen.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
-final Shader linearGradient = const LinearGradient(
-  colors: <Color>[Color(0xFF6C43BC), Color(0xFF72DFC5)],
-).createShader(const Rect.fromLTWH(70.0, 150.0, 200.0, 70.0));
+class BookmarkScreen extends StatefulWidget {
+  const BookmarkScreen({super.key});
 
-class BookmarkScreen extends StatelessWidget {
-  const BookmarkScreen({Key? key}) : super(key: key);
+  @override
+  State<BookmarkScreen> createState() => _BookmarkScreenState();
+}
+
+class _BookmarkScreenState extends State<BookmarkScreen> {
+  final Shader linearGradient = const LinearGradient(
+    colors: <Color>[Color(0xFF6C43BC), Color(0xFF72DFC5)],
+  ).createShader(const Rect.fromLTWH(70.0, 150.0, 200.0, 70.0));
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: CustomScrollView(
         slivers: [
