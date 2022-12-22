@@ -172,16 +172,151 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ? NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
-                SliverAppBar(
-                  centerTitle: true,
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
-                  title: Container(
-                    transform: Matrix4.translationValues(0, 5, 0),
-                    width: 120,
-                    height: 35,
-                    child: Image.asset(
-                      'png/DuzLogo.PNG',
+                SliverPadding(
+                  padding: const EdgeInsets.only(top: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 49.0,
+                      // this generates our tabs buttons
+                      child: ListView.builder(
+                        // this gives the TabBar a bounce effect when scrolling farther than it's size
+                        physics: const BouncingScrollPhysics(),
+                        controller: _scrollController,
+                        // make the list horizontal
+                        scrollDirection: Axis.horizontal,
+                        // number of tabs
+                        itemCount: typelist.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            // each button's key
+                            key: _keys[index],
+                            // padding for the buttons
+                            padding: const EdgeInsets.all(6.0),
+                            child: ButtonTheme(
+                              child: AnimatedBuilder(
+                                animation: _colorTweenBackgroundOn,
+                                builder: (context, child) => ElevatedButton(
+                                  // get the color of the button's background (dependent of its state)
+                                  // make the button a rectangle with round corners
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      _getBackgroundColor(index),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    setState(
+                                      () {
+                                        _buttonTap = true;
+                                        // trigger the controller to change between Tab Views
+                                        _controller.animateTo(index);
+                                        // set the current index
+                                        _setCurrentIndex(index);
+                                        // scroll to the tapped button (needed if we tap the active button and it's not on its position)
+                                        _scrollTo(index);
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    // get the icon
+                                    typelist[index].name,
+                                    // get the color of the icon (dependent of its state)
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: Divider(
+                    height: 5,
+                    thickness: 1,
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    height: 200,
+                    color: Colors.white,
+                    child: ListView.builder(
+                      clipBehavior: Clip.none,
+                      itemCount: districtslist.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            onTap: () {
+                              setState(
+                                () {
+                                  _currentDistrictIndex =
+                                      index; //gridviewda gelen veriyi değiştir
+                                },
+                              );
+                            },
+                            child: Container(
+                              width: 125,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: _currentDistrictIndex == index
+                                      ? Colors.blue
+                                      : Colors.white,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    height: 200,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.network(
+                                        districtslist[index].districtimageurl,
+                                        fit: BoxFit.fitHeight,
+                                      ),
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromARGB(113, 0, 0, 0),
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10),
+                                          ),
+                                        ),
+                                        height: 25,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(5),
+                                              child: Text(
+                                                districtslist[index]
+                                                    .districtname,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -192,21 +327,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'En Popülerler',
-                                style: TextStyle(fontSize: 15),
-                              ),
+                              const Text('En Popülerler'),
                               TextButton(
                                 onPressed: () {},
-                                child: Text('Tümünü Gör',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: Color(0xff6c43bc))),
-                              )
+                                child: const Text(
+                                  'Tümünü Gör',
+                                  style: TextStyle(color: Color(0xFF6C43BC)),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -214,114 +346,111 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           height: 225,
                           color: Colors.white,
                           child: ListView.builder(
-                              clipBehavior: Clip.none,
-                              itemCount: 5,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 0, 8, 5),
-                                  child: InkWell(
-                                    onTap: (() {
-                                      Navigator.of(context)
-                                          .pushNamed('/content', arguments: []);
-                                    }),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        width: 300,
-                                        height: 225,
-                                        color: Colors.black,
-                                        child: Stack(
-                                          children: [
-                                            SizedBox(
-                                              height: 250,
-                                              child: ShaderMask(
-                                                shaderCallback: (rect) {
-                                                  return const LinearGradient(
-                                                      begin:
-                                                          Alignment.bottomLeft,
-                                                      end: Alignment.topRight,
-                                                      colors: [
-                                                        Colors.black,
-                                                        Color.fromARGB(
-                                                            124, 0, 0, 0),
-                                                        Colors.transparent,
-                                                      ],
-                                                      stops: [
-                                                        .35,
-                                                        .75,
-                                                        1,
-                                                      ]).createShader(
-                                                      Rect.fromLTRB(
-                                                          0,
-                                                          0,
-                                                          rect.width,
-                                                          rect.height));
-                                                },
-                                                blendMode: BlendMode.dstIn,
-                                                child: Image.asset(
-                                                  'png/ayasofya.jpg',
-                                                  fit: BoxFit.fitHeight,
-                                                ),
+                            clipBehavior: Clip.none,
+                            itemCount: 5,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: (() {
+                                    Navigator.of(context).pushNamed(
+                                      '/content',
+                                      arguments: [],
+                                    );
+                                  }),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      width: 300,
+                                      height: 250,
+                                      color: Colors.black,
+                                      child: Stack(
+                                        children: [
+                                          SizedBox(
+                                            height: 250,
+                                            child: ShaderMask(
+                                              shaderCallback: (rect) {
+                                                return const LinearGradient(
+                                                  begin: Alignment.bottomLeft,
+                                                  end: Alignment.topRight,
+                                                  colors: [
+                                                    Colors.black,
+                                                    Color.fromARGB(
+                                                        124, 0, 0, 0),
+                                                    Colors.transparent,
+                                                  ],
+                                                  stops: [
+                                                    .35,
+                                                    .75,
+                                                    1,
+                                                  ],
+                                                ).createShader(
+                                                  Rect.fromLTRB(0, 0,
+                                                      rect.width, rect.height),
+                                                );
+                                              },
+                                              blendMode: BlendMode.dstIn,
+                                              child: Image.asset(
+                                                'png/ayasofya.jpg',
+                                                fit: BoxFit.fitHeight,
                                               ),
                                             ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(3.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: const [
-                                                      Text(
-                                                        '4.5/5',
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                      Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
-                                                        size: 20,
-                                                      )
-                                                    ],
-                                                  ),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(3.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: const [
+                                                    Text(
+                                                      '4.5/5',
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: Colors.white),
+                                                    ),
+                                                    Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                      size: 20,
+                                                    ),
+                                                  ],
                                                 ),
-                                                Container(
-                                                  height: 40,
-                                                  color: const Color.fromARGB(
-                                                      113, 0, 0, 0),
-                                                  child: Row(
-                                                    children: const [
-                                                      Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  10),
-                                                          child: Text(
-                                                            'Ayasofya',
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: Colors
-                                                                    .white),
-                                                          )),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                              ),
+                                              Container(
+                                                height: 30,
+                                                color: const Color.fromARGB(
+                                                    113, 0, 0, 0),
+                                                child: Row(
+                                                  children: const [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      child: Text(
+                                                        'Ayasofya',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                );
-                              }),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -517,25 +646,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         Row(
                           children: [
                             IconButton(
-                                onPressed: () {
-                                  setState(() {
+                              onPressed: () {
+                                setState(
+                                  () {
                                     isGrid = true;
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.grid_view_sharp,
-                                  color: isGrid ? Colors.purple : Colors.grey,
-                                )),
+                                  },
+                                );
+                              },
+                              icon: Icon(
+                                Icons.grid_view_sharp,
+                                color: isGrid ? Colors.purple : Colors.grey,
+                              ),
+                            ),
                             IconButton(
-                                onPressed: () {
-                                  setState(() {
+                              onPressed: () {
+                                setState(
+                                  () {
                                     isGrid = false;
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.format_list_bulleted,
-                                  color: isGrid ? Colors.grey : Colors.purple,
-                                )),
+                                  },
+                                );
+                              },
+                              icon: Icon(
+                                Icons.format_list_bulleted,
+                                color: isGrid ? Colors.grey : Colors.purple,
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -549,8 +684,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     controller: _controller,
                     children: isFetched
                         ? (isGrid ? gridviewlist : scrollableviewlist)
-                        : [])
-                : const Center(child: CircularProgressIndicator()),
+                        : [],
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
           )
         : const Scaffold();
   }

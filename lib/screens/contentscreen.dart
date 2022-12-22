@@ -136,9 +136,8 @@ class _ContentScreenState extends State<ContentScreen> {
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: Container(
+            child: SizedBox(
               height: 450,
-              color: Colors.white,
               child: Stack(
                 children: [
                   CarouselSlider.builder(
