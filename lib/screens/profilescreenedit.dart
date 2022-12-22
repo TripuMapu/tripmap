@@ -12,7 +12,6 @@ class ProfileScreenEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -44,8 +43,9 @@ class ProfileScreenEdit extends StatelessWidget {
               )
             ],
             title: Container(
-              padding: const EdgeInsets.only(top: 5),
-              width: 150,
+              transform: Matrix4.translationValues(0, 5, 0),
+              width: 100,
+              height: 30,
               child: Image.asset(
                 'png/DuzLogo.PNG',
                 height: 50,
