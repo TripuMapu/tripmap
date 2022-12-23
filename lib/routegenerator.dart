@@ -3,6 +3,7 @@ import 'package:tripmap/screens/contentscreen.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/mainscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
+import 'package:tripmap/screens/polyline_screen.dart';
 import 'package:tripmap/screens/showallscreen.dart';
 
 class RouteGenerator {
@@ -25,6 +26,11 @@ class RouteGenerator {
         return CustomPageRoute(
             child: ShowAllScreen(
           currentindex: args.elementAt(0),
+        ));
+      case '/map':
+        return CustomPageRoute(
+            child: PolylineScreen(
+          destinationLocation: args.elementAt(0),
         ));
       default:
         return CustomPageRoute(child: const LoginScreen());

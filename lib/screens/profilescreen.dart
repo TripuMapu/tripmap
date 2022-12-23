@@ -11,7 +11,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        body: currentindex == 4
+        body: currentindex == 3
             ? CustomScrollView(
                 slivers: [
                   SliverAppBar(

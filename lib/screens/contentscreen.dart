@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tripmap/models/comment.dart';
 import 'package:tripmap/models/location.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
-
 import 'package:tripmap/screens/loginscreen.dart';
 import '../services/authservices.dart';
 
@@ -104,63 +103,36 @@ class _ContentScreenState extends State<ContentScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: Container(
-                height: 35,
-                width: 125,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF6C43BC),
-                      Color(0xFF72DFC5),
-                    ],
-                    stops: [
-                      0.2,
-                      1.0,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(30),
+            Container(
+              height: 35,
+              width: 125,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF6C43BC),
+                    Color(0xFF72DFC5),
+                  ],
+                  stops: [
+                    0.2,
+                    1.0,
+                  ],
                 ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'GİT',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+                borderRadius: BorderRadius.circular(30),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 15),
-              child: VerticalDivider(
-                thickness: 2,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Container(
-                height: 35,
-                width: 125,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF6C43BC),
-                      Color(0xFF72DFC5),
-                    ],
-                    stops: [
-                      0.2,
-                      1.0,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'ROTAYA EKLE',
-                    style: TextStyle(color: Colors.white),
-                  ),
+              child: TextButton(
+                onPressed: () {
+                  String coordinate = widget.location.coordinate;
+                  List<String> latitudelongitude =
+                      coordinate.split(',').toList();
+                  LatLng destination = LatLng(
+                      double.parse(latitudelongitude[0]),
+                      double.parse(latitudelongitude[1]));
+                  Navigator.of(context)
+                      .pushNamed('/map', arguments: [destination]);
+                },
+                child: const Text(
+                  'GİT',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
@@ -174,23 +146,29 @@ class _ContentScreenState extends State<ContentScreen> {
               height: 450,
               child: Stack(
                 children: [
-                  CarouselSlider.builder(
-                    itemCount: (widget.location.imageurls).length,
-                    itemBuilder: (context, index, realIndex) {
-                      final urlImage = widget.location.imageurls;
-                      return buildImage(urlImage[index], index);
-                    },
-                    options: CarouselOptions(
-                      height: 450,
-                      enlargeCenterPage: true,
-                      enlargeStrategy: CenterPageEnlargeStrategy.height,
-                      viewportFraction: 1,
-                      autoPlay: true,
-                      autoPlayInterval: const Duration(seconds: 10),
-                      onPageChanged: (index, reason) =>
-                          setState(() => activeIndex = index),
-                    ),
-                  ),
+                  (widget.location.imageurls).length > 1
+                      ? CarouselSlider.builder(
+                          itemCount: (widget.location.imageurls).length,
+                          itemBuilder: (context, index, realIndex) {
+                            final urlImage = widget.location.imageurls;
+                            return buildImage(urlImage[index], index);
+                          },
+                          options: CarouselOptions(
+                            height: 450,
+                            enlargeCenterPage: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.height,
+                            viewportFraction: 1,
+                            autoPlay: true,
+                            autoPlayInterval: const Duration(seconds: 10),
+                            onPageChanged: (index, reason) =>
+                                setState(() => activeIndex = index),
+                          ),
+                        )
+                      : Image.network(
+                          widget.location.imageurls[0],
+                          height: 450,
+                          fit: BoxFit.cover,
+                        ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 60.0),
                     child: Container(
@@ -334,7 +312,7 @@ class _ContentScreenState extends State<ContentScreen> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: Text(commentList[index].content),
                     ),
                   ],

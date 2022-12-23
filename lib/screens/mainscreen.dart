@@ -40,12 +40,6 @@ class _MainScreenState extends State<MainScreen>
       ),
     ),
     BottomNavigationBarItem(
-      label: 'Harita',
-      icon: Icon(
-        Icons.map_outlined,
-      ),
-    ),
-    BottomNavigationBarItem(
       label: 'Profil',
       icon: Icon(
         LineAwesomeIcons.user,
@@ -83,9 +77,6 @@ class _MainScreenState extends State<MainScreen>
               currentindex: currentIndex,
             ),
             BookmarkScreen(
-              currentindex: currentIndex,
-            ),
-            PolylineScreen(
               currentindex: currentIndex,
             ),
             LoadingScreen.isLogined
