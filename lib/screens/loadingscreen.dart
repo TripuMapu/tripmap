@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 import 'package:tripmap/services/authservices.dart';
 import 'package:tripmap/services/gradienttext.dart';
+import 'package:tripmap/globals.dart' as globals;
 
 // ignore: must_be_immutable
 class LoadingScreen extends StatefulWidget {
   static bool isLogined = false;
   static String currentRoute = '/homepage';
+  static var currentLocation;
   const LoadingScreen({Key? key}) : super(key: key);
 
   @override
@@ -55,6 +59,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
         }
       },
     );
+    Position position = await globals.deviceLocation;
+    LatLng location = LatLng(position.latitude, position.longitude);
+    CameraPosition initialCameraPosition = CameraPosition(
+        zoom: 13.5,
+        //tilt: CAMERA_TILT,
+        bearing: 30,
+        target: location);
+    LoadingScreen.currentLocation = initialCameraPosition;
   }
 
   @override
