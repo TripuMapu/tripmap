@@ -9,7 +9,6 @@ export 'loginscreen.dart';
 
 class LoginScreen extends StatefulWidget {
   static var username, email, profilepicture, userid, fullname;
-  static bool isArtist = false;
 
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -241,6 +240,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         LoginScreen.email = val.data['email'];
                                         LoginScreen.username =
                                             val.data['username'];
+                                        LoginScreen.fullname =
+                                            val.data['fullname'];
+                                        LoginScreen.profilepicture =
+                                            val.data['profilepicture'];
                                         _handleRemeberme();
                                         setState(
                                           () {
@@ -322,12 +325,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterScreen(),
-                            ),
-                          );
+                          Navigator.of(context)
+                              .pushNamed('/register', arguments: []);
                         },
                       ),
                     ),

@@ -15,12 +15,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController mailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+  TextEditingController fullnameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordagainController = TextEditingController();
 
-  bool comparePaswords(
-      String password, String passwordagain, String name, String mail) {
-    if (password != '' && passwordagain != '' && name != '' && mail != '') {
+  bool comparePaswords(String password, String passwordagain, String name,
+      String mail, String fullname) {
+    if (password != '' &&
+        passwordagain != '' &&
+        name != '' &&
+        mail != '' &&
+        fullname != '') {
       if (password == passwordagain) {
         return true;
       } else {
@@ -95,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
-                    controller: nameController,
+                    controller: fullnameController,
                     decoration: InputDecoration(
                       labelText: 'Ad Soyad',
                       enabledBorder: OutlineInputBorder(
@@ -237,6 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           passwordagainController.text,
                           nameController.text,
                           mailController.text,
+                          fullnameController.text,
                         )) {
                           return 'Şifreler Uyuşmuyor';
                         } else {
@@ -277,11 +283,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (val.isEmpty) {
                           return 'Boş Bırakılamaz';
                         } else if (!comparePaswords(
-                          passwordController.text,
-                          passwordagainController.text,
-                          nameController.text,
-                          mailController.text,
-                        )) {
+                            passwordController.text,
+                            passwordagainController.text,
+                            nameController.text,
+                            mailController.text,
+                            fullnameController.text)) {
                           return 'Şifreler Uyuşmuyor';
                         } else {
                           return null;
@@ -325,8 +331,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 (_) => showLoadingOverlay());
                           });
                           AuthService()
-                              .adduser(nameController.text,
-                                  passwordController.text, mailController.text)
+                              .adduser(
+                                  nameController.text,
+                                  passwordController.text,
+                                  mailController.text,
+                                  fullnameController.text)
                               .then(
                             (val) {
                               if (val.data['success']) {

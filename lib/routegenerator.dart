@@ -4,6 +4,7 @@ import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/mainscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 import 'package:tripmap/screens/polyline_screen.dart';
+import 'package:tripmap/screens/registerscreen.dart';
 import 'package:tripmap/screens/showallscreen.dart';
 
 class RouteGenerator {
@@ -22,6 +23,8 @@ class RouteGenerator {
         return CustomPageRoute(child: const LoadingScreen());
       case '/login':
         return CustomPageRoute(child: const LoginScreen());
+      case '/register':
+        return CustomPageRoute(child: const RegisterScreen());
       case '/showAll':
         return CustomPageRoute(
             child: ShowAllScreen(

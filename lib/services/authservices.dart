@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthService {
-  String ip = "192.168.1.5";
+  String ip = "192.168.1.11";
   // ignore: unnecessary_new
   Dio dio = new Dio();
 
@@ -27,24 +27,18 @@ class AuthService {
     }
   }
 
-  adduser(username, password, email) async {
+  adduser(username, password, email, fullname) async {
     try {
-      return await dio.post('http://mobileapp-server.herokuapp.com/adduser',
+      return await dio.post('http://$ip:5554/adduser',
           data: {
             "username": username,
             "password": password,
             "email": email,
+            'fullname': fullname,
           },
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {
-      Fluttertoast.showToast(
-        msg: e.response!.data['msg'],
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      rethrow;
     }
   }
 
@@ -204,18 +198,21 @@ class AuthService {
     }
   }
 
-  tryserver() async {
+  changeusername(int userid, String username) async {
     try {
-      return await dio.get('http://mobileapp-server.herokuapp.com/testserver');
+      await dio.post('http://$ip:5554/changeusername',
+          data: {'userid': userid, 'username': username});
     } on DioError catch (e) {
-      Fluttertoast.showToast(
-        msg: e.response!.data['msg'],
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      rethrow;
+    }
+  }
+
+  changepassword(int userid, String password) async {
+    try {
+      await dio.post('http://$ip:5554/changepassword',
+          data: {'userid': userid, 'password': password});
+    } on DioError catch (e) {
+      rethrow;
     }
   }
 }

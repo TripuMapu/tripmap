@@ -79,11 +79,9 @@ class _MainScreenState extends State<MainScreen>
             BookmarkScreen(
               currentindex: currentIndex,
             ),
-            LoadingScreen.isLogined
-                ? ProfileScreen(
-                    currentindex: currentIndex,
-                  )
-                : const LoginScreen()
+            ProfileScreen(
+              currentindex: currentIndex,
+            )
           ],
         ),
       ),

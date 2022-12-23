@@ -2,9 +2,65 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
+import 'package:tripmap/screens/loginscreen.dart';
+import 'package:tripmap/services/authservices.dart';
 
-class ProfileScreenEdit extends StatelessWidget {
+class ProfileScreenEdit extends StatefulWidget {
   const ProfileScreenEdit({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileScreenEdit> createState() => _ProfileScreenEditState();
+}
+
+class _ProfileScreenEditState extends State<ProfileScreenEdit> {
+  OverlayEntry? entry;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordagainController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
+
+  void changeusername(String username) async {
+    await AuthService().changeusername(LoginScreen.userid, username);
+    hideLoadingOverlay();
+  }
+
+  void changepassword(String password) async {
+    await AuthService().changepassword(LoginScreen.userid, password);
+    hideLoadingOverlay();
+  }
+
+  bool comparepassword(String password, String passwordagain) {
+    if (password == passwordagain) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void showLoadingOverlay() {
+    final overlay = Overlay.of(context)!;
+
+    entry = OverlayEntry(
+      builder: (context) => buildLoadingOverlay(),
+    );
+
+    overlay.insert(entry!);
+  }
+
+  void hideLoadingOverlay() {
+    entry!.remove();
+    entry = null;
+  }
+
+  Widget buildLoadingOverlay() => const Material(
+        color: Colors.transparent,
+        elevation: 8,
+        child: Center(
+          child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 163, 171, 192)),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +121,11 @@ class ProfileScreenEdit extends StatelessWidget {
                           decoration: TextDecoration.underline)),
                 ),
                 Form(
+                  key: _formKey,
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-                      //controller: nameController,
+                      controller: nameController,
                       decoration: InputDecoration(
                         labelText: 'Yeni Kullanıcı Adı',
                         enabledBorder: OutlineInputBorder(
@@ -123,7 +180,15 @@ class ProfileScreenEdit extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                  (_) => showLoadingOverlay());
+                            });
+                            changeusername(nameController.text);
+                          }
+                        },
                         child: const Text(
                           'KAYDET',
                           style: TextStyle(color: Colors.white),
@@ -140,109 +205,135 @@ class ProfileScreenEdit extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.only(bottom: 30),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Eski Parola',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Color(0xFF6C43BC)),
+                Form(
+                  key: _formKey2,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Eski Parola',
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF6C43BC)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF72DFC5)),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(color: Colors.red),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Colors.redAccent),
+                            ),
+                          ),
+                          validator: (val) {
+                            if (val != null) {
+                              if (val.isEmpty) {
+                                return 'Boş Bırakılamaz';
+                              } else {
+                                return null;
+                              }
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Color(0xFF72DFC5)),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: TextFormField(
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Yeni Parola',
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF6C43BC)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF72DFC5)),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(color: Colors.red),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Colors.redAccent),
+                            ),
+                          ),
+                          validator: (val) {
+                            if (val != null) {
+                              if (val.isEmpty) {
+                                return 'Boş Bırakılamaz';
+                              } else if (comparepassword(
+                                  passwordController.text,
+                                  passwordagainController.text)) {
+                                return 'Parolalar Uyuşmuyor';
+                              } else {
+                                return null;
+                              }
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Colors.red),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: TextFormField(
+                          controller: passwordagainController,
+                          decoration: InputDecoration(
+                            labelText: 'Parolayı Doğrula',
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF6C43BC)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF72DFC5)),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: const BorderSide(color: Colors.red),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  const BorderSide(color: Colors.redAccent),
+                            ),
+                          ),
+                          validator: (val) {
+                            if (val != null) {
+                              if (val.isEmpty) {
+                                return 'Boş Bırakılamaz';
+                              } else if (comparepassword(
+                                  passwordController.text,
+                                  passwordagainController.text)) {
+                                return 'Parolalar Uyuşmuyor';
+                              } else {
+                                return null;
+                              }
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
                       ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Colors.redAccent),
-                      ),
-                    ),
-                    validator: (val) {
-                      if (val != null) {
-                        if (val.isEmpty) {
-                          return 'Boş Bırakılamaz';
-                        } else {
-                          return null;
-                        }
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Yeni Parola',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Color(0xFF6C43BC)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Color(0xFF72DFC5)),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Colors.red),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Colors.redAccent),
-                      ),
-                    ),
-                    validator: (val) {
-                      if (val != null) {
-                        if (val.isEmpty) {
-                          return 'Boş Bırakılamaz';
-                        } else {
-                          return null;
-                        }
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Parolayı Doğrula',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Color(0xFF6C43BC)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Color(0xFF72DFC5)),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Colors.red),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Colors.redAccent),
-                      ),
-                    ),
-                    validator: (val) {
-                      if (val != null) {
-                        if (val.isEmpty) {
-                          return 'Boş Bırakılamaz';
-                        } else {
-                          return null;
-                        }
-                      } else {
-                        return null;
-                      }
-                    },
+                    ],
                   ),
                 ),
                 Padding(
@@ -264,7 +355,15 @@ class ProfileScreenEdit extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (_formKey2.currentState!.validate()) {
+                          setState(() {
+                            WidgetsBinding.instance.addPostFrameCallback(
+                                (_) => showLoadingOverlay());
+                          });
+                          changepassword(passwordController.text);
+                        }
+                      },
                       child: const Text(
                         'KAYDET',
                         style: TextStyle(color: Colors.white),
