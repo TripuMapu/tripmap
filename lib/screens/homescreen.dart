@@ -177,401 +177,412 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return widget.currentindex == 0
-        ? NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                SliverAppBar(
-                  backgroundColor: Colors.transparent,
-                  centerTitle: true,
-                  title: Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Image.asset(
-                      'png/DuzLogo.PNG',
-                      width: 150,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: widget.currentindex == 0
+          ? NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    backgroundColor: Colors.transparent,
+                    centerTitle: true,
+                    title: Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Image.asset(
+                        'png/DuzLogo.PNG',
+                        width: 150,
+                      ),
                     ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    color: Colors.white,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('En Popülerler'),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: ((context) => ShowAllScreen()),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('En Popülerler'),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: ((context) => ShowAllScreen()),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Tümünü Gör',
+                                    style: TextStyle(color: Color(0xFF6C43BC)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 225,
+                            color: Colors.white,
+                            child: ListView.builder(
+                              clipBehavior: Clip.none,
+                              itemCount: 5,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                    onTap: (() {
+                                      Navigator.of(context).pushNamed(
+                                        '/content',
+                                        arguments: [],
+                                      );
+                                    }),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Container(
+                                        width: 300,
+                                        height: 250,
+                                        color: Colors.black,
+                                        child: Stack(
+                                          children: [
+                                            SizedBox(
+                                              height: 250,
+                                              child: ShaderMask(
+                                                shaderCallback: (rect) {
+                                                  return const LinearGradient(
+                                                    begin: Alignment.bottomLeft,
+                                                    end: Alignment.topRight,
+                                                    colors: [
+                                                      Colors.black,
+                                                      Color.fromARGB(
+                                                          124, 0, 0, 0),
+                                                      Colors.transparent,
+                                                    ],
+                                                    stops: [
+                                                      .35,
+                                                      .75,
+                                                      1,
+                                                    ],
+                                                  ).createShader(
+                                                    Rect.fromLTRB(
+                                                        0,
+                                                        0,
+                                                        rect.width,
+                                                        rect.height),
+                                                  );
+                                                },
+                                                blendMode: BlendMode.dstIn,
+                                                child: Image.asset(
+                                                  'png/ayasofya.jpg',
+                                                  fit: BoxFit.fitHeight,
+                                                ),
+                                              ),
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(3.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: const [
+                                                      Text(
+                                                        '4.5/5',
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                        size: 20,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  height: 30,
+                                                  color: const Color.fromARGB(
+                                                      113, 0, 0, 0),
+                                                  child: Row(
+                                                    children: const [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(5),
+                                                        child: Text(
+                                                          'Ayasofya',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      height: 175,
+                      color: Colors.white,
+                      child: ListView.builder(
+                        clipBehavior: Clip.none,
+                        itemCount: districtslist.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (_currentDistrictIndex != index) {
+                                    _currentDistrictIndex = index;
+                                    showLoadingOverlay();
+                                    initializedata(
+                                        districtslist[index].districtid, false);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                width: 125,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: _currentDistrictIndex == index
+                                        ? Color(0xff6c43bc)
+                                        : Colors.white,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    SizedBox(
+                                      height: 175,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(6),
+                                        child: Image.network(
+                                          districtslist[index].districtimageurl,
+                                          fit: BoxFit.fitHeight,
+                                          loadingBuilder: (BuildContext context,
+                                              Widget child,
+                                              ImageChunkEvent?
+                                                  loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          decoration: const BoxDecoration(
+                                            color: Color.fromARGB(113, 0, 0, 0),
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                          ),
+                                          height: 25,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Text(
+                                                  districtslist[index]
+                                                      .districtname,
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                        height: 49.0,
+                        // this generates our tabs buttons
+                        child: ListView.builder(
+                            // this gives the TabBar a bounce effect when scrolling farther than it's size
+                            physics: BouncingScrollPhysics(),
+                            controller: _scrollController,
+                            // make the list horizontal
+                            scrollDirection: Axis.horizontal,
+                            // number of tabs
+                            itemCount: typelist.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                  // each button's key
+                                  key: _keys[index],
+                                  // padding for the buttons
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: ButtonTheme(
+                                      child: AnimatedBuilder(
+                                    animation: _colorTweenBackgroundOn,
+                                    builder: (context, child) => ElevatedButton(
+                                        // get the color of the button's background (dependent of its state)
+                                        // make the button a rectangle with round corners
+                                        style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0),
+                                                side: const BorderSide(
+                                                    color: Color(0xff6c43bc)),
+                                              ),
+                                            ),
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    _getBackgroundColor(
+                                                        index))),
+                                        onPressed: () {
+                                          setState(() {
+                                            _buttonTap = true;
+                                            // trigger the controller to change between Tab Views
+                                            _controller.animateTo(index);
+                                            // set the current index
+                                            _setCurrentIndex(index);
+                                            // scroll to the tapped button (needed if we tap the active button and it's not on its position)
+                                            _scrollTo(index);
+                                          });
+                                        },
+                                        child: Text(
+                                          // get the icon
+                                          typelist[index].name,
+                                          style: TextStyle(
+                                              color: index == _currentIndex
+                                                  ? Colors.white
+                                                  : const Color(0xff6c43bc)),
+                                          // get the color of the icon (dependent of its state)
+                                        )),
+                                  )));
+                            })),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: DropdownButton(
+                                underline:
+                                    const SizedBox(), //Daha sonra burası list ile düzeltilecek
+                                value:
+                                    'Popülerlik', //Daha sonra burası list ile düzeltilecek
+                                items: const [
+                                  //Daha sonra burası list ile düzeltilecek
+                                  DropdownMenuItem(
+                                    //Daha sonra burası list ile düzeltilecek
+                                    value:
+                                        'Popülerlik', //Daha sonra burası list ile düzeltilecek
+                                    child: Text(
+                                        'Popülerlik'), //Daha sonra burası list ile düzeltilecek
+                                  ) //Daha sonra burası list ile düzeltilecek
+                                ],
+                                onChanged: (String? newValue) {}),
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      isGrid = true;
+                                    },
                                   );
                                 },
-                                child: const Text(
-                                  'Tümünü Gör',
-                                  style: TextStyle(color: Color(0xFF6C43BC)),
+                                icon: Icon(
+                                  Icons.grid_view_sharp,
+                                  color: isGrid ? Colors.purple : Colors.grey,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      isGrid = false;
+                                    },
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.format_list_bulleted,
+                                  color: isGrid ? Colors.grey : Colors.purple,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        Container(
-                          height: 225,
-                          color: Colors.white,
-                          child: ListView.builder(
-                            clipBehavior: Clip.none,
-                            itemCount: 5,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: (() {
-                                    Navigator.of(context).pushNamed(
-                                      '/content',
-                                      arguments: [],
-                                    );
-                                  }),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Container(
-                                      width: 300,
-                                      height: 250,
-                                      color: Colors.black,
-                                      child: Stack(
-                                        children: [
-                                          SizedBox(
-                                            height: 250,
-                                            child: ShaderMask(
-                                              shaderCallback: (rect) {
-                                                return const LinearGradient(
-                                                  begin: Alignment.bottomLeft,
-                                                  end: Alignment.topRight,
-                                                  colors: [
-                                                    Colors.black,
-                                                    Color.fromARGB(
-                                                        124, 0, 0, 0),
-                                                    Colors.transparent,
-                                                  ],
-                                                  stops: [
-                                                    .35,
-                                                    .75,
-                                                    1,
-                                                  ],
-                                                ).createShader(
-                                                  Rect.fromLTRB(0, 0,
-                                                      rect.width, rect.height),
-                                                );
-                                              },
-                                              blendMode: BlendMode.dstIn,
-                                              child: Image.asset(
-                                                'png/ayasofya.jpg',
-                                                fit: BoxFit.fitHeight,
-                                              ),
-                                            ),
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(3.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: const [
-                                                    Text(
-                                                      '4.5/5',
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.white),
-                                                    ),
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                      size: 20,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                height: 30,
-                                                color: const Color.fromARGB(
-                                                    113, 0, 0, 0),
-                                                child: Row(
-                                                  children: const [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      child: Text(
-                                                        'Ayasofya',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 175,
-                    color: Colors.white,
-                    child: ListView.builder(
-                      clipBehavior: Clip.none,
-                      itemCount: districtslist.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                if (_currentDistrictIndex != index) {
-                                  _currentDistrictIndex = index;
-                                  showLoadingOverlay();
-                                  initializedata(
-                                      districtslist[index].districtid, false);
-                                }
-                              });
-                            },
-                            child: Container(
-                              width: 125,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: _currentDistrictIndex == index
-                                      ? Color(0xff6c43bc)
-                                      : Colors.white,
-                                  width: 2,
-                                ),
-                              ),
-                              child: Stack(
-                                children: [
-                                  SizedBox(
-                                    height: 175,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(6),
-                                      child: Image.network(
-                                        districtslist[index].districtimageurl,
-                                        fit: BoxFit.fitHeight,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          color: Color.fromARGB(113, 0, 0, 0),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                        ),
-                                        height: 25,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: Text(
-                                                districtslist[index]
-                                                    .districtname,
-                                                style: const TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+                ];
+              },
+              body: isFetched
+                  ? TabBarView(
+                      controller: _controller,
+                      children: isFetched
+                          ? (isGrid ? gridviewlist : scrollableviewlist)
+                          : [],
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: 49.0,
-                      // this generates our tabs buttons
-                      child: ListView.builder(
-                          // this gives the TabBar a bounce effect when scrolling farther than it's size
-                          physics: BouncingScrollPhysics(),
-                          controller: _scrollController,
-                          // make the list horizontal
-                          scrollDirection: Axis.horizontal,
-                          // number of tabs
-                          itemCount: typelist.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                                // each button's key
-                                key: _keys[index],
-                                // padding for the buttons
-                                padding: const EdgeInsets.all(6.0),
-                                child: ButtonTheme(
-                                    child: AnimatedBuilder(
-                                  animation: _colorTweenBackgroundOn,
-                                  builder: (context, child) => ElevatedButton(
-                                      // get the color of the button's background (dependent of its state)
-                                      // make the button a rectangle with round corners
-                                      style: ButtonStyle(
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                              side: const BorderSide(
-                                                  color: Color(0xff6c43bc)),
-                                            ),
-                                          ),
-                                          backgroundColor:
-                                              MaterialStateProperty.all(
-                                                  _getBackgroundColor(index))),
-                                      onPressed: () {
-                                        setState(() {
-                                          _buttonTap = true;
-                                          // trigger the controller to change between Tab Views
-                                          _controller.animateTo(index);
-                                          // set the current index
-                                          _setCurrentIndex(index);
-                                          // scroll to the tapped button (needed if we tap the active button and it's not on its position)
-                                          _scrollTo(index);
-                                        });
-                                      },
-                                      child: Text(
-                                        // get the icon
-                                        typelist[index].name,
-                                        style: TextStyle(
-                                            color: index == _currentIndex
-                                                ? Colors.white
-                                                : const Color(0xff6c43bc)),
-                                        // get the color of the icon (dependent of its state)
-                                      )),
-                                )));
-                          })),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: DropdownButton(
-                              underline:
-                                  const SizedBox(), //Daha sonra burası list ile düzeltilecek
-                              value:
-                                  'Popülerlik', //Daha sonra burası list ile düzeltilecek
-                              items: const [
-                                //Daha sonra burası list ile düzeltilecek
-                                DropdownMenuItem(
-                                  //Daha sonra burası list ile düzeltilecek
-                                  value:
-                                      'Popülerlik', //Daha sonra burası list ile düzeltilecek
-                                  child: Text(
-                                      'Popülerlik'), //Daha sonra burası list ile düzeltilecek
-                                ) //Daha sonra burası list ile düzeltilecek
-                              ],
-                              onChanged: (String? newValue) {}),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    isGrid = true;
-                                  },
-                                );
-                              },
-                              icon: Icon(
-                                Icons.grid_view_sharp,
-                                color: isGrid ? Colors.purple : Colors.grey,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    isGrid = false;
-                                  },
-                                );
-                              },
-                              icon: Icon(
-                                Icons.format_list_bulleted,
-                                color: isGrid ? Colors.grey : Colors.purple,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ];
-            },
-            body: isFetched
-                ? TabBarView(
-                    controller: _controller,
-                    children: isFetched
-                        ? (isGrid ? gridviewlist : scrollableviewlist)
-                        : [],
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-          )
-        : const Scaffold();
+            )
+          : Container(),
+    );
   }
 
   // runs during the switching tabs animation

@@ -56,8 +56,9 @@ class _ContentScreenState extends State<ContentScreen> {
     if (LoadingScreen.isLogined) {
       isBookmarked = await AuthService()
           .checkifitsinbookmarks(LoginScreen.userid, widget.location.id);
+    } else {
+      isBookmarked = false;
     }
-    isBookmarked = false;
     setState(() {});
   }
 
