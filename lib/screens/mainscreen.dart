@@ -83,7 +83,9 @@ class _MainScreenState extends State<MainScreen>
             SearchScreen(
               currentindex: currentIndex,
             ),
-            BookmarkScreen(),
+            BookmarkScreen(
+              currentindex: currentIndex,
+            ),
             PolylineScreen(
               currentindex: currentIndex,
             ),

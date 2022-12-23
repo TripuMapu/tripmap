@@ -148,6 +148,52 @@ class AuthService {
     }
   }
 
+  removefrombookmarks(int userid, int locationid) async {
+    try {
+      final res = await dio.post('http://$ip:5554/removefrombookmarks',
+          data: {'userid': userid, 'locationId': locationid});
+      if (res.data['success']) {
+        return res.data['msg'];
+      }
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  addtobookmarks(int userid, int locationid) async {
+    try {
+      final res = await dio.post('http://$ip:5554/addtobookmarks',
+          data: {'userid': userid, 'locationId': locationid});
+      if (res.data['success']) {
+      } else {
+        Fluttertoast.showToast(
+          msg: res.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> checkifitsinbookmarks(int userid, int locationid) async {
+    try {
+      final res = await dio.post('http://$ip:5554/checkifitsinbookmarks',
+          data: {'userid': userid, 'locationId': locationid});
+      if (res.data['success']) {
+        return res.data['condition'];
+      } else {
+        return false;
+      }
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
   getonefromlocations(locationid) async {
     try {
       final res = await dio.post('http://$ip:5554/getonefromlocations',

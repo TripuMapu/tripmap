@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tripmap/models/comment.dart';
 import 'package:tripmap/models/location.dart';
+import 'package:tripmap/screens/loadingscreen.dart';
+
+import 'package:tripmap/screens/loginscreen.dart';
 import '../services/authservices.dart';
 
 class ContentScreen extends StatefulWidget {
@@ -31,10 +35,37 @@ class _ContentScreenState extends State<ContentScreen> {
     );
   }
 
+  void addtobookmarks() async {
+    await AuthService().addtobookmarks(LoginScreen.userid, widget.location.id);
+    setState(() {
+      isBookmarked = true;
+      hideLoadingOverlay();
+    });
+  }
+
+  void removefrombookmarks() async {
+    await AuthService()
+        .removefrombookmarks(LoginScreen.userid, widget.location.id);
+    setState(() {
+      isBookmarked = false;
+      hideLoadingOverlay();
+    });
+  }
+
+  void checkifitsinbookmarks() async {
+    if (LoadingScreen.isLogined) {
+      isBookmarked = await AuthService()
+          .checkifitsinbookmarks(LoginScreen.userid, widget.location.id);
+    }
+    isBookmarked = false;
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
+    checkifitsinbookmarks();
     getComments();
   }
 
@@ -65,6 +96,7 @@ class _ContentScreenState extends State<ContentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomNavigationBar: Container(
         height: 60,
         color: Colors.white,
@@ -182,35 +214,36 @@ class _ContentScreenState extends State<ContentScreen> {
                       ),
                       Container(
                         height: 50,
+                        padding: const EdgeInsets.only(left: 5),
                         color: const Color.fromARGB(169, 0, 0, 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  child: Text(
-                                    widget.location.name,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 20),
-                                  ),
-                                ),
-                              ],
+                            Expanded(
+                              child: Text(
+                                widget.location.name,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
                             ),
                             IconButton(
                               onPressed: () {
-                                setState(
-                                  () {
-                                    if (isBookmarked == false) {
-                                      isBookmarked = true;
-                                    } else {
-                                      isBookmarked = false;
-                                    }
-                                  },
-                                );
+                                if (LoadingScreen.isLogined) {
+                                  if (isBookmarked == false) {
+                                    setState(() {
+                                      showLoadingOverlay();
+                                    });
+                                    addtobookmarks();
+                                  } else {
+                                    setState(() {
+                                      showLoadingOverlay();
+                                    });
+                                    removefrombookmarks();
+                                  }
+                                } else {
+                                  Navigator.of(context).pushNamed('/login');
+                                }
                               },
                               icon: Icon(
                                 isBookmarked
@@ -221,7 +254,7 @@ class _ContentScreenState extends State<ContentScreen> {
                             )
                           ],
                         ),
-                      )
+                      ),
                     ],
                   )
                 ],

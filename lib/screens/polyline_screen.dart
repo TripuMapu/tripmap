@@ -83,29 +83,35 @@ class _PolylineScreenState extends State<PolylineScreen> {
 
   @override
   void initState() {
-    super.initState();
-    //WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
-    // getCurrentLocation();
-    //getPolyPoints();
-    //polylinePoints = PolylinePoints();
+    if (widget.currentindex == 3) {
+      super.initState();
+      //WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
+      // getCurrentLocation();
+      //getPolyPoints();
+      //polylinePoints = PolylinePoints();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        initialCameraPosition:
-            CameraPosition(target: LatLng(41.015137, 28.979530), zoom: 14.5),
-        polylines: _polylines,
-        markers: {
-          Marker(markerId: MarkerId("destination"), position: destination),
-          Marker(
-              markerId: MarkerId("currentLocation"),
-              position: LatLng(41.015137, 28.979530))
-        },
-        /*    onMapCreated: (controller) =>
+      backgroundColor: Colors.white,
+      body: widget.currentindex == 3
+          ? GoogleMap(
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(41.015137, 28.979530), zoom: 14.5),
+              polylines: _polylines,
+              markers: {
+                Marker(
+                    markerId: MarkerId("destination"), position: destination),
+                Marker(
+                    markerId: MarkerId("currentLocation"),
+                    position: LatLng(41.015137, 28.979530))
+              },
+              /*    onMapCreated: (controller) =>
             {_controller.complete(controller), getPolyPoints()}, */
-      ),
+            )
+          : Container(),
     );
   }
 }

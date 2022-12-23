@@ -44,16 +44,13 @@ class SearchBody extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                locations[index].name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 15),
-                              ),
-                            ],
+                          Expanded(
+                            child: Text(
+                              locations[index].name,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.normal, fontSize: 15),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 5),

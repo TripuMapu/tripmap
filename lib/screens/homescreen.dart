@@ -46,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final List _keys = [];
   bool _buttonTap = false;
   List<District> districtslist = [];
+  List<District> districtsdummylist = [];
   List<Location> locationlist = [];
   List<LocationType> typelist = [];
   List<Widget> gridviewlist = [];
@@ -59,8 +60,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     scrollableviewlist.clear();
     if (isinitializing) {
       await AuthService().getdistricts().then((val) {
-        districtslist.clear();
-        districtslist = val.map((json) => District.fromJson(json)).toList();
+        districtsdummylist.clear();
+        districtsdummylist =
+            val.map((json) => District.fromJson(json)).toList();
+        for (int i = 0; i < districtsdummylist.length; i++) {
+          if (districtsdummylist[i].districtlocationcount > 0) {
+            districtslist.add(districtsdummylist[i]);
+          }
+        }
+        districtsdummylist.clear();
       });
     }
     await AuthService().getlocations(districtid).then((val) {

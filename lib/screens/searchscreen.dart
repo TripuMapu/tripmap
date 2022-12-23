@@ -133,10 +133,17 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: buildSearch(),
                         ),
                       ),
+                SliverToBoxAdapter(
+                  child: isHidden
+                      ? null
+                      : Center(
+                          child: Text(
+                              '${dummylocations.length} tane sonuç listeleniyor')),
+                ),
                 SearchBody(locations: dummylocations),
               ],
             ),
           )
-        : const Scaffold();
+        : const Scaffold(backgroundColor: Colors.white);
   }
 }

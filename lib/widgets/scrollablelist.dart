@@ -108,30 +108,16 @@ class _ScrollableListWidgetState extends State<ScrollableListWidget> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          typelocationslist[index].name,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              if (isBookmarkeds[index]) {
-                                                isBookmarkeds[index] = false;
-                                              } else {
-                                                isBookmarkeds[index] = true;
-                                              }
-                                            });
-                                          },
-                                          child: Icon(
-                                            isBookmarkeds[index]
-                                                ? Icons.bookmark
-                                                : Icons.bookmark_outline,
-                                            color: Colors.grey,
+                                        Expanded(
+                                          child: Text(
+                                            typelocationslist[index].name,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
                                     Padding(

@@ -143,43 +143,20 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                                     ),
                                   ),
                                   Container(
+                                    padding: const EdgeInsets.only(left: 5),
                                     height: 30,
                                     color: const Color.fromARGB(113, 0, 0, 0),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.start,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(5),
-                                          child: SizedBox(
-                                            width: 125,
-                                            child: Text(
-                                              typelocationslist[index].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: false,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                if (isBookmarkeds[index]) {
-                                                  isBookmarkeds[index] = false;
-                                                } else {
-                                                  isBookmarkeds[index] = true;
-                                                }
-                                              });
-                                            },
-                                            child: Icon(
-                                              isBookmarkeds[index]
-                                                  ? Icons.bookmark
-                                                  : Icons.bookmark_outline,
-                                              color: Colors.white,
-                                            ),
+                                        Expanded(
+                                          child: Text(
+                                            typelocationslist[index].name,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: false,
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
                                         ),
                                       ],
