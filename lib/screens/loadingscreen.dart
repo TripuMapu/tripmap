@@ -9,7 +9,7 @@ import 'package:tripmap/services/gradienttext.dart';
 class LoadingScreen extends StatefulWidget {
   static bool isLogined = false;
   static String currentRoute = '/homepage';
-  LoadingScreen({Key? key}) : super(key: key);
+  const LoadingScreen({Key? key}) : super(key: key);
 
   @override
   State<LoadingScreen> createState() => _LoadingScreenState();
