@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:tripmap/models/location.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 import 'package:tripmap/services/authservices.dart';
@@ -76,28 +74,16 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       body: widget.currentindex == 2
           ? CustomScrollView(
               slivers: [
-                const SliverAppBar(
+                SliverAppBar(
                   centerTitle: true,
                   elevation: 0,
                   backgroundColor: Colors.transparent,
                   title: Padding(
-                    padding: EdgeInsets.only(top: 15.0),
-                    child: Text(
-                      "Kaydedilenler",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.normal,
-                        // foreground: Paint()..shader = linearGradient,
-                        color: Color(0xFF6C43BC),
-                      ),
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Image.asset(
+                      'png/DuzLogo.PNG',
+                      width: 150,
                     ),
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: Divider(
-                    height: 5,
-                    thickness: 2,
-                    color: Color(0xFF6C43BC),
                   ),
                 ),
                 SliverList(

@@ -3,7 +3,6 @@ import 'package:tripmap/screens/bookmarkscreen.dart';
 import 'package:tripmap/screens/homescreen.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
-import 'package:tripmap/screens/mapsample.dart';
 import 'package:tripmap/screens/polyline_screen.dart';
 import 'package:tripmap/screens/profilescreen.dart';
 import 'package:tripmap/screens/searchscreen.dart';

@@ -3,6 +3,7 @@ import 'package:tripmap/screens/contentscreen.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/mainscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
+import 'package:tripmap/screens/showallscreen.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -20,6 +21,11 @@ class RouteGenerator {
         return CustomPageRoute(child: const LoadingScreen());
       case '/login':
         return CustomPageRoute(child: const LoginScreen());
+      case '/showAll':
+        return CustomPageRoute(
+            child: ShowAllScreen(
+          currentindex: args.elementAt(0),
+        ));
       default:
         return CustomPageRoute(child: const LoginScreen());
     }

@@ -1,16 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:tripmap/models/comment.dart';
 import 'package:tripmap/models/district.dart';
 import 'package:tripmap/models/location.dart';
 import 'package:tripmap/models/locationtype.dart';
-import 'package:tripmap/routegenerator.dart';
-import 'package:tripmap/screens/contentscreen.dart';
 import 'package:tripmap/screens/showallscreen.dart';
 import 'package:tripmap/services/authservices.dart';
-
 import 'package:tripmap/widgets/gridview.dart';
 import 'package:tripmap/widgets/scrollablelist.dart';
 
@@ -123,19 +116,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
   }
 
-  void changelocationdata() async {
-    setState(() {
-      isFetched = false;
-    });
-    await AuthService().getlocations(_currentDistrictIndex + 1).then((val) {
-      locationlist.clear();
-      locationlist = val.map((json) => Location.fromJson(json)).toList();
-    });
-    setState(() {
-      isFetched = true;
-    });
-  }
-
   void showLoadingOverlay() {
     final overlay = Overlay.of(context)!;
 
@@ -206,20 +186,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text('En Popülerler'),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((context) => ShowAllScreen()),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    'Tümünü Gör',
-                                    style: TextStyle(color: Color(0xFF6C43BC)),
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -450,64 +416,94 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
-                        height: 49.0,
-                        // this generates our tabs buttons
-                        child: ListView.builder(
-                            // this gives the TabBar a bounce effect when scrolling farther than it's size
-                            physics: BouncingScrollPhysics(),
-                            controller: _scrollController,
-                            // make the list horizontal
-                            scrollDirection: Axis.horizontal,
-                            // number of tabs
-                            itemCount: typelist.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                  // each button's key
-                                  key: _keys[index],
-                                  // padding for the buttons
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: ButtonTheme(
-                                      child: AnimatedBuilder(
-                                    animation: _colorTweenBackgroundOn,
-                                    builder: (context, child) => ElevatedButton(
-                                        // get the color of the button's background (dependent of its state)
-                                        // make the button a rectangle with round corners
-                                        style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(18.0),
-                                                side: const BorderSide(
-                                                    color: Color(0xff6c43bc)),
-                                              ),
-                                            ),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    _getBackgroundColor(
-                                                        index))),
-                                        onPressed: () {
-                                          setState(() {
-                                            _buttonTap = true;
-                                            // trigger the controller to change between Tab Views
-                                            _controller.animateTo(index);
-                                            // set the current index
-                                            _setCurrentIndex(index);
-                                            // scroll to the tapped button (needed if we tap the active button and it's not on its position)
-                                            _scrollTo(index);
-                                          });
-                                        },
-                                        child: Text(
-                                          // get the icon
-                                          typelist[index].name,
-                                          style: TextStyle(
-                                              color: index == _currentIndex
-                                                  ? Colors.white
-                                                  : const Color(0xff6c43bc)),
-                                          // get the color of the icon (dependent of its state)
-                                        )),
-                                  )));
-                            })),
+                      height: 49.0,
+                      // this generates our tabs buttons
+                      child: ListView.builder(
+                        // this gives the TabBar a bounce effect when scrolling farther than it's size
+                        physics: const BouncingScrollPhysics(),
+                        controller: _scrollController,
+                        // make the list horizontal
+                        scrollDirection: Axis.horizontal,
+                        // number of tabs
+                        itemCount: typelist.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            // each button's key
+                            key: _keys[index],
+                            // padding for the buttons
+                            padding: const EdgeInsets.all(6.0),
+                            child: ButtonTheme(
+                              child: AnimatedBuilder(
+                                animation: _colorTweenBackgroundOn,
+                                builder: (context, child) => ElevatedButton(
+                                  // get the color of the button's background (dependent of its state)
+                                  // make the button a rectangle with round corners
+                                  style: ButtonStyle(
+                                      fixedSize:
+                                          MaterialStateProperty.all<Size>(
+                                        const Size.fromWidth(90),
+                                      ),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                          side: const BorderSide(
+                                            color: Color(0xff6c43bc),
+                                          ),
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              _getBackgroundColor(index))),
+                                  onPressed: () {
+                                    setState(
+                                      () {
+                                        _buttonTap = true;
+                                        // trigger the controller to change between Tab Views
+                                        _controller.animateTo(index);
+                                        // set the current index
+                                        _setCurrentIndex(index);
+                                        // scroll to the tapped button (needed if we tap the active button and it's not on its position)
+                                        _scrollTo(index);
+                                      },
+                                    );
+                                  },
+                                  child: Text(
+                                    // get the icon
+                                    typelist[index].name,
+                                    style: TextStyle(
+                                      color: index == _currentIndex
+                                          ? Colors.white
+                                          : const Color(0xff6c43bc),
+                                    ),
+                                    // get the color of the icon (dependent of its state)
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 30,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/showAll',
+                              arguments: [typelist[_currentIndex].id]);
+                        },
+                        child: const Text(
+                          'Türe Ait Tüm Yerleri Görüntüle',
+                          style: TextStyle(
+                            color: Color(0xFF6C43BC),
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(

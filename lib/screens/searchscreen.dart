@@ -97,14 +97,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 SliverAppBar(
                   centerTitle: true,
                   backgroundColor: Colors.transparent,
-                  title: Container(
-                    transform: Matrix4.translationValues(0, 5, 0),
-                    width: 100,
-                    height: 30,
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 5),
                     child: Image.asset(
                       'png/DuzLogo.PNG',
-                      height: 50,
-                      width: 60,
+                      width: 150,
                     ),
                   ),
                   actions: [

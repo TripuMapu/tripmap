@@ -16,18 +16,6 @@ class GridViewWidget extends StatefulWidget {
 
 class _GridViewWidgetState extends State<GridViewWidget> {
   List<Location> typelocationslist = [];
-  List<bool> isBookmarkeds = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
 
   void gettypelocations() {
     for (int i = 0; i < widget.locationslist.length; i++) {

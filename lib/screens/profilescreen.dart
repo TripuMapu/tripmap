@@ -10,6 +10,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: currentindex == 4
             ? CustomScrollView(
                 slivers: [
@@ -17,11 +18,11 @@ class ProfileScreen extends StatelessWidget {
                     centerTitle: true,
                     elevation: 0,
                     backgroundColor: Colors.transparent,
-                    title: const Text(
-                      "P r o f i l",
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Color(0xFF6C43BC),
+                    title: Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: Image.asset(
+                        'png/DuzLogo.PNG',
+                        width: 150,
                       ),
                     ),
                     actions: [
@@ -71,7 +72,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Padding(
+                          /* Padding(
                             padding: const EdgeInsets.fromLTRB(225, 135, 0, 0),
                             child: Container(
                               width: 35,
@@ -98,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
+                          ), */
                         ],
                       ),
                     ),
