@@ -17,7 +17,7 @@ class Comment {
         id: json['_id'],
         userID: json['commentUserId'],
         locationID: json['commentLocationId'],
-        rating: json['commentRating'],
+        rating: (json['commentRating']).toDouble(),
         content: json['commentContent'],
       );
 }

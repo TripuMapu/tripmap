@@ -8,6 +8,7 @@ import 'package:tripmap/models/location.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 import '../services/authservices.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ContentScreen extends StatefulWidget {
   final Location location;
@@ -184,13 +185,16 @@ class _ContentScreenState extends State<ContentScreen> {
                           height: 450,
                           fit: BoxFit.cover,
                         ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 60.0),
-                    child: Container(
-                      alignment: Alignment.bottomCenter,
-                      child: buildIndicator(),
-                    ),
-                  ),
+                  (widget.location.imageurls).length > 1
+                      ? Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 60.0),
+                          child: Container(
+                            alignment: Alignment.bottomCenter,
+                            child: buildIndicator(),
+                          ),
+                        )
+                      : Container(),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -271,11 +275,11 @@ class _ContentScreenState extends State<ContentScreen> {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
             sliver: SliverToBoxAdapter(
               child: Text(
                 widget.location.defination,
-                style: const TextStyle(fontSize: 18),
+                style: GoogleFonts.inter(fontSize: 17),
               ),
             ),
           ),

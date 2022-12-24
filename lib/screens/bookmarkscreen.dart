@@ -178,12 +178,11 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 5),
+                                                Expanded(
                                                   child: Text(
                                                     locationlist[index].name,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: const TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -236,13 +235,38 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Giriş Yapmalısın'),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed('/login', arguments: []);
-                          },
-                          child: const Text('GirişYap')),
+                      Container(
+                        width: 250,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF6C43BC),
+                              Color(0xFF72DFC5),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: SizedBox(
+                          child: TextButton(
+                            child: const Text(
+                              'Devam etmeden önce giriş yap!',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pushNamed('/login', arguments: []);
+                            },
+                          ),
+                        ),
+                      ),
+                      /* ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed('/login', arguments: []);
+                        },
+                        child: const Text('GirişYap'),
+                      ), */
                     ],
                   ),
                 )

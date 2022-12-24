@@ -40,6 +40,7 @@ dependencies:
   line_awesome_flutter: ^2.0.0  
   location : ^4.4.0
   flutter_polyline_points: ^1.0.0
+  google_fonts: ^2.1.0
 
 
   

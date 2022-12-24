@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
-                                Text('Beğenebileceklerin'),
+                                Text('Önerilenler'),
                               ],
                             ),
                           ),
@@ -272,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                         MainAxisAlignment.end,
                                                     children: [
                                                       Text(
-                                                        '${(randomlocationlist[index].avaragerating).toDouble()}/5',
+                                                        '${(randomlocationlist[index].avaragerating).toDouble().toStringAsFixed(2)}/5',
                                                         style: const TextStyle(
                                                             fontSize: 15,
                                                             color:
@@ -419,7 +419,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          '${districtslist[index].districtavaragerating.toDouble()}/5',
+                                          '${districtslist[index].districtavaragerating.toDouble().toStringAsFixed(2)}/5',
                                           style: const TextStyle(
                                               fontSize: 15,
                                               color: Colors.white),
