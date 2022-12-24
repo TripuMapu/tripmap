@@ -297,7 +297,7 @@ class _ContentScreenState extends State<ContentScreen> {
                             height: 40,
                             width: 40,
                             child: Image.asset(
-                              'png/ayasofya.jpg',
+                              'png/gigaChad.jpg',
                               fit: BoxFit.fitHeight,
                             ),
                           ),
@@ -312,7 +312,7 @@ class _ContentScreenState extends State<ContentScreen> {
                                     fontSize: 13, fontWeight: FontWeight.bold),
                               ),
                               RatingBarIndicator(
-                                rating: commentList[index].rating,
+                                rating: (commentList[index].rating).toDouble(),
                                 itemBuilder: (context, index) => const Icon(
                                   Icons.star,
                                   color: Colors.amber,

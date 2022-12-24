@@ -50,12 +50,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
     gridviewlist.clear();
     scrollableviewlist.clear();
-    randomlocationlist.clear();
     alllocations.clear();
     if (isinitializing) {
       await AuthService().getalllocations().then(
         (val) {
           alllocations = val.map((json) => Location.fromJson(json)).toList();
+          randomlocationlist.clear();
           for (int i = 0; i < 10; i++) {
             randomlocationlist.add(getRandomElement(alllocations));
           }
@@ -272,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                         MainAxisAlignment.end,
                                                     children: [
                                                       Text(
-                                                        '${randomlocationlist[index].avaragerating}/5',
+                                                        '${(randomlocationlist[index].avaragerating).toDouble()}/5',
                                                         style: const TextStyle(
                                                             fontSize: 15,
                                                             color:
@@ -361,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 child: Stack(
                                   children: [
                                     SizedBox(
-                                      height: 175,
+                                      height: 200,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(6),
                                         child: Image.network(
@@ -389,6 +389,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           },
                                         ),
                                       ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          '${districtslist[index].districtavaragerating.toDouble()}/5',
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
+                                        ),
+                                        const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                          size: 20,
+                                        ),
+                                      ],
                                     ),
                                     Column(
                                       mainAxisAlignment: MainAxisAlignment.end,

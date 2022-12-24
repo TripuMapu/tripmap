@@ -6,7 +6,7 @@ class Location {
   final List<String> imageurls;
   final String defination;
   final String coordinate;
-  final int avaragerating;
+  final double avaragerating;
 
   Location({
     required this.id,
@@ -27,6 +27,6 @@ class Location {
         imageurls: List<String>.from(json['locationImageUrl']),
         defination: json['locationDefination'],
         coordinate: json['locationCoordinate'],
-        avaragerating: json['locationAvarageRating'],
+        avaragerating: (json['locationAvarageRating']).toDouble(),
       );
 }

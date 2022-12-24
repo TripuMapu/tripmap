@@ -3,7 +3,7 @@ class District {
   final String districtname;
   final String districtimageurl;
   final int districtlocationcount;
-  final int districtavaragerating;
+  final double districtavaragerating;
 
   const District({
     required this.districtid,
@@ -18,6 +18,6 @@ class District {
         districtname: json['districtName'],
         districtimageurl: json['districtImageUrl'],
         districtlocationcount: json['districtLocationCount'],
-        districtavaragerating: json['districtAvarageRating'],
+        districtavaragerating: (json['districtAvarageRating']).toDouble(),
       );
 }

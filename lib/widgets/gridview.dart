@@ -115,7 +115,7 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          '${typelocationslist[index].avaragerating}/5',
+                                          '${(typelocationslist[index].avaragerating).toDouble()}/5',
                                           style: const TextStyle(
                                               fontSize: 13,
                                               color: Colors.white),
