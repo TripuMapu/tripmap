@@ -1,7 +1,6 @@
 library tripmap.globals.dart;
 
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 String apiKey = "AIzaSyB3Wa2VPWoLEPCvCyomq23hsRtaz8RH8sQ";
 var deviceLocation = _determinePosition();

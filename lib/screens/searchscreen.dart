@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:tripmap/models/location.dart';
 import 'package:tripmap/services/authservices.dart';
 import 'package:tripmap/widgets/searchbody.dart';
@@ -106,7 +103,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   actions: [
                     IconButton(
-                        color: isHidden ? Colors.grey : Color(0xff6c43bc),
+                        color: isHidden ? Colors.grey : const Color(0xff6c43bc),
                         onPressed: () {
                           setState(() {
                             if (isHidden) {

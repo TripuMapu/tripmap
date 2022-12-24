@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_clause
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -69,6 +71,20 @@ class AuthService {
       } else {
         return List.empty();
       }
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  makecomment(int userid, int locationid, String content, double rating) async {
+    try {
+      final res = await dio.post('http://$ip:5554/addcomment', data: {
+        'userId': userid,
+        'locationId': locationid,
+        'content': content,
+        'rating': rating
+      });
+      return res.data['msg'];
     } on DioError catch (e) {
       rethrow;
     }
@@ -198,6 +214,16 @@ class AuthService {
     }
   }
 
+  Future<int> getlocationidfromname(String locationname) async {
+    try {
+      final res = await dio.post('http://$ip:5554/getlocationidfromname',
+          data: {'locationname': locationname});
+      return res.data['locationid'];
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
   changeusername(int userid, String username) async {
     try {
       await dio.post('http://$ip:5554/changeusername',
@@ -211,6 +237,43 @@ class AuthService {
     try {
       await dio.post('http://$ip:5554/changepassword',
           data: {'userid': userid, 'password': password});
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List> getroutes(int userid) async {
+    try {
+      final res =
+          await dio.post('http://$ip:5554/getroutes', data: {'userid': userid});
+      if (res.data['success']) {
+        return res.data['array'];
+      } else {
+        return List.empty();
+      }
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  addtoroutes(int userid, String locationname) async {
+    try {
+      await dio.post('http://$ip:5554/addtoroutes',
+          data: {'userid': userid, 'routelocationname': locationname});
+    } on DioError catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> getusernamefromid(int userid) async {
+    try {
+      final res = await dio
+          .post('http://$ip:5554/getusernamefromid', data: {'userid': userid});
+      if (res.data['success']) {
+        return res.data['username'];
+      } else {
+        return 'Bilinmeyen Kullanıcı';
+      }
     } on DioError catch (e) {
       rethrow;
     }

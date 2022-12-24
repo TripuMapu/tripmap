@@ -1,8 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:tripmap/models/district.dart';
 import 'package:tripmap/models/location.dart';
 import 'package:tripmap/models/locationtype.dart';
-import 'package:tripmap/screens/showallscreen.dart';
 import 'package:tripmap/services/authservices.dart';
 import 'package:tripmap/widgets/gridview.dart';
 import 'package:tripmap/widgets/scrollablelist.dart';
@@ -25,14 +26,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _animationControllerOff;
   late Animation _colorTweenBackgroundOn;
   late Animation _colorTweenBackgroundOff;
-  late Animation _colorTweenForegroundOn;
-  late Animation _colorTweenForegroundOff;
   int _currentIndex = 0;
   int _prevControllerIndex = 0;
   double _aniValue = 0.0;
   double _prevAniValue = 0.0;
-  final Color _foregroundOn = Colors.white;
-  final Color _foregroundOff = Colors.black;
   final Color _backgroundOn = const Color(0xff6c43bc);
   final Color _backgroundOff = Colors.white;
   final ScrollController _scrollController = ScrollController();
@@ -44,6 +41,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   List<LocationType> typelist = [];
   List<Widget> gridviewlist = [];
   List<Widget> scrollableviewlist = [];
+  List<Location> randomlocationlist = [];
+  List<Location> alllocations = [];
 
   void initializedata(int districtid, bool isinitializing) async {
     setState(() {
@@ -51,7 +50,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
     gridviewlist.clear();
     scrollableviewlist.clear();
+    randomlocationlist.clear();
+    alllocations.clear();
     if (isinitializing) {
+      await AuthService().getalllocations().then(
+        (val) {
+          alllocations = val.map((json) => Location.fromJson(json)).toList();
+          for (int i = 0; i < 10; i++) {
+            randomlocationlist.add(getRandomElement(alllocations));
+          }
+        },
+      );
+      alllocations.clear();
       await AuthService().getdistricts().then((val) {
         districtsdummylist.clear();
         districtsdummylist =
@@ -96,17 +106,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       _colorTweenBackgroundOff =
           ColorTween(begin: _backgroundOn, end: _backgroundOff)
               .animate(_animationControllerOff);
-      _colorTweenForegroundOff =
-          ColorTween(begin: _foregroundOn, end: _foregroundOff)
-              .animate(_animationControllerOff);
+
       _animationControllerOn = AnimationController(
           vsync: this, duration: const Duration(milliseconds: 150));
       _animationControllerOn.value = 1.0;
       _colorTweenBackgroundOn =
           ColorTween(begin: _backgroundOff, end: _backgroundOn)
-              .animate(_animationControllerOn);
-      _colorTweenForegroundOn =
-          ColorTween(begin: _foregroundOff, end: _foregroundOn)
               .animate(_animationControllerOn);
     }
 
@@ -114,6 +119,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       hideLoadingOverlay();
       isFetched = true;
     });
+  }
+
+  T getRandomElement<T>(List<T> list) {
+    final random = new Random();
+    var i = random.nextInt(list.length);
+    return list[i];
   }
 
   void showLoadingOverlay() {
@@ -184,8 +195,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text('En Popülerler'),
+                              children: const [
+                                Text('Beğenebileceklerin'),
                               ],
                             ),
                           ),
@@ -194,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             color: Colors.white,
                             child: ListView.builder(
                               clipBehavior: Clip.none,
-                              itemCount: 5,
+                              itemCount: randomlocationlist.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
                                 return Padding(
@@ -203,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     onTap: (() {
                                       Navigator.of(context).pushNamed(
                                         '/content',
-                                        arguments: [],
+                                        arguments: [randomlocationlist[index]],
                                       );
                                     }),
                                     child: ClipRRect(
@@ -241,9 +252,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   );
                                                 },
                                                 blendMode: BlendMode.dstIn,
-                                                child: Image.asset(
-                                                  'png/ayasofya.jpg',
-                                                  fit: BoxFit.fitHeight,
+                                                child: Image.network(
+                                                  randomlocationlist[index]
+                                                      .imageurls[0],
+                                                  fit: BoxFit.cover,
                                                 ),
                                               ),
                                             ),
@@ -258,15 +270,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.end,
-                                                    children: const [
+                                                    children: [
                                                       Text(
-                                                        '4.5/5',
-                                                        style: TextStyle(
+                                                        '${randomlocationlist[index].avaragerating}/5',
+                                                        style: const TextStyle(
                                                             fontSize: 15,
                                                             color:
                                                                 Colors.white),
                                                       ),
-                                                      Icon(
+                                                      const Icon(
                                                         Icons.star,
                                                         color: Colors.amber,
                                                         size: 20,
@@ -279,13 +291,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   color: const Color.fromARGB(
                                                       113, 0, 0, 0),
                                                   child: Row(
-                                                    children: const [
+                                                    children: [
                                                       Padding(
                                                         padding:
-                                                            EdgeInsets.all(5),
+                                                            const EdgeInsets
+                                                                .all(5),
                                                         child: Text(
-                                                          'Ayasofya',
-                                                          style: TextStyle(
+                                                          randomlocationlist[
+                                                                  index]
+                                                              .name,
+                                                          style:
+                                                              const TextStyle(
                                                             color: Colors.white,
                                                           ),
                                                         ),
@@ -337,7 +353,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: _currentDistrictIndex == index
-                                        ? Color(0xff6c43bc)
+                                        ? const Color(0xff6c43bc)
                                         : Colors.white,
                                     width: 2,
                                   ),
@@ -691,17 +707,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     } else {
       // if the button is inactive
       return _backgroundOff;
-    }
-  }
-
-  _getForegroundColor(int index) {
-    // the same as the above
-    if (index == _currentIndex) {
-      return _colorTweenForegroundOn.value;
-    } else if (index == _prevControllerIndex) {
-      return _colorTweenForegroundOff.value;
-    } else {
-      return _foregroundOff;
     }
   }
 }

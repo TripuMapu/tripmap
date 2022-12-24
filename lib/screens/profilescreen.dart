@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:tripmap/models/location.dart';
+import 'package:tripmap/models/triproute.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 import 'package:tripmap/screens/profilescreenedit.dart';
+import 'package:tripmap/services/authservices.dart';
 
 class ProfileScreen extends StatefulWidget {
   final int currentindex;
@@ -13,9 +16,122 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  List<TripRoute> routelist = [];
+  List<String> daystring = [];
+  List<String> monthstring = [];
+  List locationjson = [];
+  List<Location> locationlist = [];
+  OverlayEntry? entry;
+  late TextEditingController commentController;
+
+  void getroutes() async {
+    await AuthService().getroutes(LoginScreen.userid).then((val) async {
+      routelist = val.map((json) => TripRoute.fromJson(json)).toList();
+
+      for (int i = 0; i < routelist.length; i++) {
+        await AuthService()
+            .getlocationidfromname(routelist[i].routelocationname)
+            .then((val) async {
+          await AuthService().getonefromlocations(val).then((val) {
+            locationjson.add(val);
+          });
+        });
+
+        daystring.add((routelist[i].date.split('.'))[0]);
+        switch ((routelist[i].date.split('.'))[1]) {
+          case '1':
+            monthstring.add('OCA');
+            break;
+          case '2':
+            monthstring.add('ŞUB');
+            break;
+          case '3':
+            monthstring.add('MAR');
+            break;
+          case '4':
+            monthstring.add('NİS');
+            break;
+          case '5':
+            monthstring.add('MAY');
+            break;
+          case '6':
+            monthstring.add('HAZ');
+            break;
+          case '7':
+            monthstring.add('TEM');
+            break;
+          case '8':
+            monthstring.add('AĞU');
+            break;
+          case '9':
+            monthstring.add('EYL');
+            break;
+          case '10':
+            monthstring.add('EKİ');
+            break;
+          case '11':
+            monthstring.add('KAS');
+            break;
+          case '12':
+            monthstring.add('ARA');
+            break;
+        }
+      }
+    });
+    setState(() {
+      locationlist =
+          locationjson.map((json) => Location.fromJson(json)).toList();
+      hideLoadingOverlay();
+    });
+  }
+
+  void makecomment(int locationid, String content) async {
+    await AuthService()
+        .makecomment(LoginScreen.userid, locationid, content, 4.5);
+
+    setState(() {
+      hideLoadingOverlay();
+    });
+  }
+
+  void showLoadingOverlay() {
+    final overlay = Overlay.of(context)!;
+
+    entry = OverlayEntry(
+      builder: (context) => buildLoadingOverlay(),
+    );
+
+    overlay.insert(entry!);
+  }
+
+  void hideLoadingOverlay() {
+    entry!.remove();
+    entry = null;
+  }
+
+  Widget buildLoadingOverlay() => const Material(
+        color: Colors.transparent,
+        elevation: 8,
+        child: Center(
+          child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 163, 171, 192)),
+        ),
+      );
+
   @override
   void initState() {
-    super.initState();
+    if (widget.currentindex == 3 && LoadingScreen.isLogined) {
+      super.initState();
+      WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
+      commentController = TextEditingController();
+      getroutes();
+    }
+  }
+
+  @override
+  void dispose() {
+    commentController.dispose();
+    super.dispose();
   }
 
   @override
@@ -220,7 +336,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text('Rotalarım'),
+                              const Text('Önceki Ziyaretlerim'),
                               TextButton(
                                 onPressed: () {},
                                 child: const Text(
@@ -237,138 +353,151 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
-                          childCount: 2,
+                          childCount: routelist.length,
                           ((context, index) {
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(30, 0, 30, 10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      Color(0xFF6C43BC),
-                                      Color(0xFF72DFC5),
-                                    ],
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed('/content',
+                                      arguments: [locationlist[index]]);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFF6C43BC),
+                                        Color(0xFF72DFC5),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(1.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(12)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            width: 50,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              gradient: const LinearGradient(
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                                colors: [
-                                                  Color(0xFF6C43BC),
-                                                  Color(0xFF72DFC5),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(1.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              width: 50,
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                gradient: const LinearGradient(
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  colors: [
+                                                    Color(0xFF6C43BC),
+                                                    Color(0xFF72DFC5),
+                                                  ],
+                                                ),
+                                              ),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    monthstring[index],
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    daystring[index],
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  "OCT",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "23",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 10, 0),
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10, 10, 0, 8),
-                                                  child: Row(
+                                          Expanded(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 10, 0),
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(10, 10, 0, 8),
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          routelist[index]
+                                                              .routelocationname,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                        /* Icon(
+                                                          LineAwesomeIcons
+                                                              .arrow_right,
+                                                        ),
+                                                        Text(
+                                                          " ... ",
+                                                          style: const TextStyle(
+                                                            fontSize: 18,
+                                                          ),
+                                                        ),
+                                                        Icon(
+                                                          LineAwesomeIcons
+                                                              .arrow_right,
+                                                        ),
+                                                        Text(
+                                                          "Ayasofya Camii",
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                          ),
+                                                        ), */
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
                                                     children: [
-                                                      Text(
-                                                        "Galata Kulesi",
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        LineAwesomeIcons
-                                                            .arrow_right,
-                                                      ),
-                                                      Text(
-                                                        " ... ",
-                                                        style: const TextStyle(
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        LineAwesomeIcons
-                                                            .arrow_right,
-                                                      ),
-                                                      Text(
-                                                        "Ayasofya Camii",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
+                                                      InkWell(
+                                                        onTap: () {
+                                                          openDialog(
+                                                              locationlist[
+                                                                      index]
+                                                                  .id);
+                                                        },
+                                                        child: const Text(
+                                                          "Yorum Yap",
+                                                          style: TextStyle(
+                                                            fontSize: 10,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                            color: Color(
+                                                                0xFF6C43BC),
+                                                          ),
                                                         ),
                                                       ),
                                                     ],
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {},
-                                                      child: const Text(
-                                                        "Rotayı Görüntüle",
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                          color:
-                                                              Color(0xFF6C43BC),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -383,16 +512,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Giriş Yapmalısın'),
+                        const Text('Giriş Yapmalısın'),
                         ElevatedButton(
                             onPressed: () {
                               Navigator.of(context)
                                   .pushNamed('/login', arguments: []);
                             },
-                            child: Text('GirişYap')),
+                            child: const Text('GirişYap')),
                       ],
                     ),
                   )
             : Container());
   }
+
+  Future openDialog(int locationid) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: const Text('Yorum Yap'),
+            content: TextField(
+              controller: commentController,
+              maxLength: 150,
+              maxLines: 6,
+              decoration:
+                  const InputDecoration(hintText: 'Yorumun', hintMaxLines: 5),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    commentController.clear();
+                  },
+                  child: const Text('İptal Et')),
+              TextButton(
+                  onPressed: () {
+                    WidgetsBinding.instance
+                        .addPostFrameCallback((_) => showLoadingOverlay());
+                    makecomment(locationid, commentController.text);
+                    Navigator.of(context).pop();
+                    commentController.clear();
+                  },
+                  child: const Text('Gönder'))
+            ],
+          ));
 }

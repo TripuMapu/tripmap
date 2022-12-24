@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripmap/models/location.dart';
+import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
 import 'package:tripmap/services/authservices.dart';
 
@@ -100,128 +101,151 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: widget.currentindex == 2
-          ? RefreshIndicator(
-              onRefresh: refresh,
-              child: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    centerTitle: true,
-                    elevation: 0,
-                    backgroundColor: Colors.transparent,
-                    title: Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: Image.asset(
-                        'png/DuzLogo.PNG',
-                        width: 150,
+          ? LoadingScreen.isLogined
+              ? RefreshIndicator(
+                  onRefresh: refresh,
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverAppBar(
+                        centerTitle: true,
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        title: Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Image.asset(
+                            'png/DuzLogo.PNG',
+                            width: 150,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      childCount: locationlist.length,
-                      ((context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                '/content',
-                                arguments: [
-                                  locationlist[index],
-                                ],
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                gradient: const LinearGradient(
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                  colors: [
-                                    Color(0xFF6C43BC),
-                                    Color(0xFF72DFC5),
-                                  ],
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(2.0),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          childCount: locationlist.length,
+                          ((context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                    '/content',
+                                    arguments: [
+                                      locationlist[index],
+                                    ],
+                                  );
+                                },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12)),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: SizedBox(
-                                          width: 60,
-                                          height: 65,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            child: Image.network(
-                                              (locationlist[index]
-                                                  .imageurls)[0],
-                                              fit: BoxFit.fitHeight,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5),
-                                              child: Text(
-                                                locationlist[index].name,
-                                                style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.normal,
+                                    borderRadius: BorderRadius.circular(12),
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFF6C43BC),
+                                        Color(0xFF72DFC5),
+                                      ],
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(10),
+                                            child: SizedBox(
+                                              width: 60,
+                                              height: 65,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child: Image.network(
+                                                  (locationlist[index]
+                                                      .imageurls)[0],
+                                                  fit: BoxFit.fitHeight,
                                                 ),
                                               ),
                                             ),
-                                            IconButton(
-                                              padding: const EdgeInsets.only(
-                                                  right: 5),
-                                              onPressed: () {
-                                                if (isbookmarkeds[index]) {
-                                                  showLoadingOverlay();
-                                                  removefrombookmarks(index);
-                                                } else {
-                                                  showLoadingOverlay();
-                                                  addtobookmarks(index);
-                                                }
-                                              },
-                                              icon: isbookmarkeds[index]
-                                                  ? const Icon(Icons.bookmark)
-                                                  : const Icon(
-                                                      Icons.bookmark_outline),
-                                              color: const Color(0xFF6C43BC),
-                                              focusColor:
-                                                  const Color(0xFF6C43BC),
-                                              iconSize: 32.5,
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5),
+                                                  child: Text(
+                                                    locationlist[index].name,
+                                                    style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 5),
+                                                  onPressed: () {
+                                                    if (isbookmarkeds[index]) {
+                                                      showLoadingOverlay();
+                                                      removefrombookmarks(
+                                                          index);
+                                                    } else {
+                                                      showLoadingOverlay();
+                                                      addtobookmarks(index);
+                                                    }
+                                                  },
+                                                  icon: isbookmarkeds[index]
+                                                      ? const Icon(
+                                                          Icons.bookmark)
+                                                      : const Icon(Icons
+                                                          .bookmark_outline),
+                                                  color:
+                                                      const Color(0xFF6C43BC),
+                                                  focusColor:
+                                                      const Color(0xFF6C43BC),
+                                                  iconSize: 32.5,
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
+                            );
+                          }),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Giriş Yapmalısın'),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed('/login', arguments: []);
+                          },
+                          child: const Text('GirişYap')),
+                    ],
+                  ),
+                )
           : Container(),
     );
   }

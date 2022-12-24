@@ -14,9 +14,10 @@ class District {
   });
 
   factory District.fromJson(Map<String, dynamic> json) => District(
-      districtid: json["_id"],
-      districtname: json['districtName'],
-      districtimageurl: json['districtImageUrl'],
-      districtlocationcount: json['districtLocationCount'],
-      districtavaragerating: json['districtAvarageRating']);
+        districtid: json["_id"],
+        districtname: json['districtName'],
+        districtimageurl: json['districtImageUrl'],
+        districtlocationcount: json['districtLocationCount'],
+        districtavaragerating: json['districtAvarageRating'],
+      );
 }

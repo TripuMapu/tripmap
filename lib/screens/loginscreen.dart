@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tripmap/screens/forgotpassword.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
-import 'package:tripmap/screens/registerscreen.dart';
 import 'package:tripmap/services/authservices.dart';
 export 'loginscreen.dart';
 
 class LoginScreen extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   static var username, email, profilepicture, userid, fullname;
 
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  // ignore: prefer_typing_uninitialized_variables
   var username, password;
   final _formKey = GlobalKey<FormState>();
   OverlayEntry? entry;
@@ -177,12 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: TextButton(
                         style: TextButton.styleFrom(),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ForgotPasswordScreen(),
-                            ),
-                          );
+                          Navigator.of(context).pushNamed('/forgotpassowrd');
                         },
                         child: const Text(
                           'Şifremi Unuttum',

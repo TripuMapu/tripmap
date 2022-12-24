@@ -12,6 +12,7 @@ import 'package:tripmap/globals.dart' as globals;
 class LoadingScreen extends StatefulWidget {
   static bool isLogined = false;
   static String currentRoute = '/homepage';
+  // ignore: prefer_typing_uninitialized_variables
   static var currentLocation;
   const LoadingScreen({Key? key}) : super(key: key);
 
@@ -59,6 +60,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         }
       },
     );
+
     Position position = await globals.deviceLocation;
     LatLng location = LatLng(position.latitude, position.longitude);
     CameraPosition initialCameraPosition = CameraPosition(

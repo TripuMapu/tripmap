@@ -21,13 +21,21 @@ class _ContentScreenState extends State<ContentScreen> {
   OverlayEntry? entry;
   int activeIndex = 0;
   List<Comment> commentList = [];
+  List<String> usernames = [];
   bool isBookmarked = false;
 
   void getComments() async {
-    await AuthService().getlocationcomments(1).then(
-      (val) {
+    await AuthService().getlocationcomments(widget.location.id).then(
+      (val) async {
+        commentList = val.map((json) => Comment.fromJson(json)).toList();
+        for (int i = 0; i < commentList.length; i++) {
+          await AuthService()
+              .getusernamefromid(commentList[i].userID)
+              .then((val) {
+            usernames.add(val);
+          });
+        }
         setState(() {
-          commentList = val.map((json) => Comment.fromJson(json)).toList();
           hideLoadingOverlay();
         });
       },
@@ -59,6 +67,20 @@ class _ContentScreenState extends State<ContentScreen> {
       isBookmarked = false;
     }
     setState(() {});
+  }
+
+  void goto() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) => showLoadingOverlay());
+    if (LoadingScreen.isLogined) {
+      await AuthService().addtoroutes(LoginScreen.userid, widget.location.name);
+    }
+    String coordinate = widget.location.coordinate;
+    List<String> latitudelongitude = coordinate.split(',').toList();
+    LatLng destination = LatLng(
+        double.parse(latitudelongitude[0]), double.parse(latitudelongitude[1]));
+    hideLoadingOverlay();
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pushNamed('/map', arguments: [destination]);
   }
 
   @override
@@ -121,14 +143,7 @@ class _ContentScreenState extends State<ContentScreen> {
               ),
               child: TextButton(
                 onPressed: () {
-                  String coordinate = widget.location.coordinate;
-                  List<String> latitudelongitude =
-                      coordinate.split(',').toList();
-                  LatLng destination = LatLng(
-                      double.parse(latitudelongitude[0]),
-                      double.parse(latitudelongitude[1]));
-                  Navigator.of(context)
-                      .pushNamed('/map', arguments: [destination]);
+                  goto();
                 },
                 child: const Text(
                   'GİT',
@@ -265,7 +280,7 @@ class _ContentScreenState extends State<ContentScreen> {
             ),
           ),
           SliverList(
-            delegate: SliverChildBuilderDelegate(childCount: commentList.length,
+            delegate: SliverChildBuilderDelegate(childCount: usernames.length,
                 (context, index) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
@@ -291,9 +306,9 @@ class _ContentScreenState extends State<ContentScreen> {
                           padding: const EdgeInsets.only(left: 5),
                           child: Column(
                             children: [
-                              const Text(
-                                'Jack.Daniel',
-                                style: TextStyle(
+                              Text(
+                                usernames[index],
+                                style: const TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.bold),
                               ),
                               RatingBarIndicator(

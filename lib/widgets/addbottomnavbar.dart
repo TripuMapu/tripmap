@@ -7,7 +7,7 @@ class AddBottomNavBar {
       Function(int index) function,
       List<BottomNavigationBarItem> bottomnavbaritems) {
     return BottomNavigationBar(
-      fixedColor: Color(0xff6C43BC),
+      fixedColor: const Color(0xff6C43BC),
       iconSize: 26,
       selectedIconTheme: const IconThemeData(
         color: Color(0xff6C43BC),

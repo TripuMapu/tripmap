@@ -30,7 +30,7 @@ class _PolylineScreenState extends State<PolylineScreen> {
 
   Set<Marker> _markers = Set<Marker>();
   double pinPillPosition = PIN_VISIBLE_POSITION;
-  LatLng currentLocation = LatLng(41.012604, 28.959648);
+  LatLng currentLocation = const LatLng(41.012604, 28.959648);
   Set<Polyline> _polylines = Set<Polyline>();
   List<LatLng> polylineCoordinates = [];
   late PolylinePoints polylinePoints;
@@ -97,7 +97,7 @@ class _PolylineScreenState extends State<PolylineScreen> {
             onTap: (LatLng loc) {
               setState(
                 () {
-                  this.pinPillPosition = PIN_INVISIBLE_POSITION;
+                  pinPillPosition = PIN_INVISIBLE_POSITION;
                 },
               );
             },
@@ -109,7 +109,7 @@ class _PolylineScreenState extends State<PolylineScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
-                color: Color(0xFF6C43BC),
+                color: const Color(0xFF6C43BC),
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pop(context);
@@ -127,12 +127,12 @@ class _PolylineScreenState extends State<PolylineScreen> {
       () {
         _markers.add(
           Marker(
-            markerId: MarkerId('destinationPin'),
+            markerId: const MarkerId('destinationPin'),
             position: widget.destinationLocation,
             onTap: () {
               setState(
                 () {
-                  this.pinPillPosition = PIN_VISIBLE_POSITION;
+                  pinPillPosition = PIN_VISIBLE_POSITION;
                 },
               );
             },
@@ -142,7 +142,7 @@ class _PolylineScreenState extends State<PolylineScreen> {
     );
     _markers.add(
       Marker(
-        markerId: MarkerId('sourcePin'),
+        markerId: const MarkerId('sourcePin'),
         position: currentLocation,
         onTap: () {
           setState(() {});
@@ -169,8 +169,8 @@ class _PolylineScreenState extends State<PolylineScreen> {
         () {
           _polylines.add(Polyline(
               width: 4,
-              polylineId: PolylineId('polyLine'),
-              color: Color(0xFF6C43BC),
+              polylineId: const PolylineId('polyLine'),
+              color: const Color(0xFF6C43BC),
               points: polylineCoordinates));
         },
       );

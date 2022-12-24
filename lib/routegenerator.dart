@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripmap/screens/contentscreen.dart';
+import 'package:tripmap/screens/forgotpassword.dart';
 import 'package:tripmap/screens/loadingscreen.dart';
 import 'package:tripmap/screens/mainscreen.dart';
 import 'package:tripmap/screens/loginscreen.dart';
@@ -30,6 +31,8 @@ class RouteGenerator {
             child: ShowAllScreen(
           currentindex: args.elementAt(0),
         ));
+      case '/forgotpassword':
+        return CustomPageRoute(child: const ForgotPasswordScreen());
       case '/map':
         return CustomPageRoute(
             child: PolylineScreen(
