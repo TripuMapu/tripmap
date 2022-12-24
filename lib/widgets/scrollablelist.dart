@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tripmap/models/location.dart';
 
 class ScrollableListWidget extends StatefulWidget {
@@ -113,7 +114,8 @@ class _ScrollableListWidgetState extends State<ScrollableListWidget> {
                                             typelocationslist[index].name,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -135,11 +137,15 @@ class _ScrollableListWidgetState extends State<ScrollableListWidget> {
                                       ),
                                     ),
                                     Expanded(
-                                        child: Text(
-                                            maxLines: 7,
-                                            overflow: TextOverflow.ellipsis,
-                                            typelocationslist[index]
-                                                .defination))
+                                      child: Text(
+                                        maxLines: 7,
+                                        overflow: TextOverflow.ellipsis,
+                                        typelocationslist[index].defination,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -149,7 +155,10 @@ class _ScrollableListWidgetState extends State<ScrollableListWidget> {
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.only(left: 13, right: 13),
+                      padding: EdgeInsets.only(
+                        left: 13,
+                        right: 13,
+                      ),
                       child: Divider(
                         thickness: 1,
                       ),
@@ -157,6 +166,7 @@ class _ScrollableListWidgetState extends State<ScrollableListWidget> {
                   ],
                 ),
               );
-            });
+            },
+          );
   }
 }
