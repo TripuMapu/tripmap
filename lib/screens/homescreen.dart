@@ -364,29 +364,54 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       height: 200,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(6),
-                                        child: Image.network(
-                                          districtslist[index].districtimageurl,
-                                          fit: BoxFit.fitHeight,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            }
-                                            return Center(
-                                              child: CircularProgressIndicator(
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
-                                                    : null,
-                                              ),
+                                        child: ShaderMask(
+                                          shaderCallback: (rect) {
+                                            return const LinearGradient(
+                                              begin: Alignment.bottomLeft,
+                                              end: Alignment.topRight,
+                                              colors: [
+                                                Colors.black,
+                                                Color.fromARGB(124, 0, 0, 0),
+                                                Colors.transparent,
+                                              ],
+                                              stops: [
+                                                .35,
+                                                .95,
+                                                1,
+                                              ],
+                                            ).createShader(
+                                              Rect.fromLTRB(0, 0, rect.width,
+                                                  rect.height),
                                             );
                                           },
+                                          blendMode: BlendMode.dstIn,
+                                          child: Image.network(
+                                            districtslist[index]
+                                                .districtimageurl,
+                                            fit: BoxFit.fitHeight,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),
